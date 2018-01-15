@@ -5,7 +5,6 @@
 
 
 #include <SDL/SDL.h>
-#include <GL/glew.h>
 #include "GameEngine.h"
 
 
