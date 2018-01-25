@@ -4,7 +4,7 @@ Hooray! As of 2017 Jan 15, it works! Entities can be added and will be rendered 
 
 ---
 
-A work-in-progress game engine I am hoping to build from the ground up.
+A work-in-progress game engine I am hoping to build from the ground up. It's currently growing to fast for all my commits to be self-explanatory.
 
 This game engine is a personal goal/study of mine and I hope to build a fully functional game out of it some day, something 2-dimensional and desktop based, pixel art in style. I am more intersted in the work behind programming game objects to move and interact with each other in the game world than I am with directly programming the operating system, so instead of writing with solely the Windows API, I am using a fantastic library called [Simple DirectMedia Layer](https://www.libsdl.org/).
 
@@ -18,10 +18,8 @@ Things to do (not in order):
 
 2. Create the 'UI' classes, which will help create a start menu instead of just jumping right into the game, and a way to manage settings and items (when they are introduced)
 
-3. Create the 'Input' class, which will (more cleanly) handle use keyboard and mouse input than it did in previous versions. Currently there is no input class because of a restructuring, but the functionality to take input is present, it just needs a nice wrapper
+3. Create the level loading and storing procedure, which will read (binary or text) files that contain information about a level, and will place them into the world to be played in
 
-4. Create the level loading and storing procedure, which will read (binary or text) files that contain information about a level, and will place them into the world to be played in
+4. Create the 'Audio' class, which will play audio files using SDL subroutines
 
-5. Create the 'Audio' class, which will play audio files using SDL subroutines
-
-6. In the future, once plain pixel art is displayed and animated on screen and manipulable via keyboard and mouse input, I hope to utilize more in depth graphical effects such as lighting.
+5. In the future, once plain pixel art is displayed and animated on screen and manipulable via keyboard and mouse input, I hope to utilize more in depth graphical effects such as lighting.
