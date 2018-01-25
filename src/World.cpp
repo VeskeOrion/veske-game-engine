@@ -1,9 +1,6 @@
-#include <SDL/SDL.h>
 #include "World.h"
 #include "Game.h"
 
-#include <sstream>
-#include <iostream>
 
 World::World() {
 
@@ -49,6 +46,7 @@ void World::init() {
 	Game::world->createEntity(new Entity());
 }
 
+
 void World::run() {
 	initializeGameTime();
 
@@ -60,9 +58,41 @@ void World::run() {
 
 			incrementTickCounter();
 		}
-		render(); 
+		render();
 	}
 }
+
+
+void World::tick() {
+	processInput();
+
+	for (auto & e : entities) {
+		e->pretick();
+	}
+
+	for (auto & e : entities) {
+		e->tick();
+	}
+
+	for (auto & e : entities) {
+		e->posttick();
+	}
+
+	// TODO remove this, but if I have to put world testing things here
+	for (auto & k : Game::input->tapped)
+		Game::logger << k << "\n";
+}
+
+
+void World::render() {
+	Game::renderer->render();
+}
+
+
+void World::processInput() {
+	Game::input->processInput();
+}
+
 
 void World::initializeGameTime() {
 	startTime = (SDL_GetPerformanceCounter() * 1000.0 / SDL_GetPerformanceFrequency());
@@ -93,56 +123,4 @@ bool World::readyToTick() {
 void World::incrementTickCounter() {
 	++gameTicks;
 	accumulator -= desiredTickTime;
-}
-
-
-void World::tick() {
-	processInput();
-	
-	auto i = Game::world->entities.begin();
-	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
-		Entity & cur = **i;
-		cur.pretick();
-	}
-
-	auto i = Game::world->entities.begin();
-	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
-		Entity & cur = **i;
-		cur.tick();
-	}
-
-	auto i = Game::world->entities.begin();
-	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
-		Entity & cur = **i;
-		cur.posttick();
-	}
-}
-
-
-void World::render() {
-	Game::renderer->render();
-}
-
-// TODO put this in input
-void World::processInput() {
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		switch (e.type) {
-			case SDL_QUIT: {
-				done = true;
-			} break;
-
-			case SDL_MOUSEMOTION: {
-
-			} break;
-
-			case SDL_MOUSEBUTTONDOWN: {
-
-			} break;
-
-			case SDL_KEYDOWN: {
-
-			}  break;
-		}
-	}
 }

@@ -1,11 +1,9 @@
 //----------------------------------------------------------------------------------------//
-// GameLog.h
-// A singleton class which is used to write essential game messages to a log or error file.
-// These are currenly created in the directory of the executable. Such messages may be "Game
-// started successfully." or "Game crashed!" etc. To use GameLog, simply include "GameLog.h"
-// and use the following syntax:
-// GameLog::log("An example log message!");
-// GameLog::err("Oh no! An example error message!");
+// Logger.h
+// Contains a class that generic messages can be written to. They will print to standard
+// output, and can also be printed to a file at the same time (in development).
+// Access this class via Game::logger, and use the << operator overload to insert strings,
+// characters, integers, etc. into the output stream.
 //----------------------------------------------------------------------------------------//
 
 
@@ -13,14 +11,15 @@
 #define LOGGER_H
 
 
-#include <fstream>
 #include <string>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <memory>
 #include <chrono>
 #include <ctime>
-#include <memory>
-#include <iomanip>
 #include <thread>
+
 
 // TODO should I make this multithreaded so it can write to files without delaying game?
 class Logger {
@@ -40,6 +39,7 @@ public:
 	//std::ofstream errFile;	
 };
 
+
 // Insert into Game::logger just like cout. Done use std::endl.
 template <typename T>
 std::unique_ptr<Logger> & operator<<(std::unique_ptr<Logger> & log, T  t) {
@@ -55,5 +55,6 @@ std::unique_ptr<Logger> & operator<<(std::unique_ptr<Logger> & log, T  t) {
 		
 	return log;
 }
+
 
 #endif //GAMELOG_H

@@ -1,5 +1,14 @@
+//----------------------------------------------------------------------------------------//
+// Math.h
+// Contains various classes that represent geometric primitives, like Vectors and
+// Rectangles. The Entity class makes use of many of these primitives to keep track of
+// position and collision (in development).
+//----------------------------------------------------------------------------------------//
+
+
 #ifndef MATH_H
 #define MATH_H
+
 
 class Vector {
 private:
@@ -66,6 +75,7 @@ public:
 	bool intersects(Rectangle & rect);
 	Vector intersectsAt(Rectangle & rect);
 	Vector center();
-
 };
+
+
 #endif // MATH_H

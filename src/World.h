@@ -1,9 +1,23 @@
+//----------------------------------------------------------------------------------------//
+// World.h
+// Contains a class that represents the game world. All Entities, when created, have a
+// position in the World, and the World manages the creating and deletion of all Entities.
+// All of the Entities in the game are stored in the entities list in the World. This class
+// is also responsible for loading Levels (in development), which contains Entities, Lights
+// (in development), and Terrain (in development), and is responsible for calling every
+// Entity's tick() method. The World ticks at constant time intervals, and the timestep is
+// contstant as well.
+// Access this class via Game::world.
+//----------------------------------------------------------------------------------------//
+
+
 #ifndef WORLD_H
 #define WORLD_H
 
 
 #include <list>
 #include <memory>
+
 #include "Entity.h"
 
 
@@ -42,17 +56,18 @@ public:
 	double currentTime;
 	double timeOfLastTick;
 	double accumulator;
-	const double desiredTickTime = 1000.0 / 60.0;
+	const double desiredFrameRate = 60.0;
+	const double desiredTickTime = 1000.0 / desiredFrameRate;
 
-	void tick();
-	void render();
 	void init();
 	void run();
-	void initializeGameTime();
-	void updateGameTime();
-	bool readyToTick();
-	void incrementTickCounter();
+	void tick();
+	void render();
 	void processInput();
+	void initializeGameTime();
+	bool readyToTick();
+	void updateGameTime();
+	void incrementTickCounter();
 };
 
 

@@ -1,7 +1,10 @@
-#include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-#include "Renderer.h"
+#include <SDL/SDL_ttf.h>
+
 #include "Game.h"
+#include "Logger.h"
+#include "Renderer.h"
+#include "Entity.h"
 
 
 Renderer::Renderer() {
@@ -10,6 +13,10 @@ Renderer::Renderer() {
 
 
 Renderer::~Renderer() {
+	TTF_Quit();
+
+	IMG_Quit();
+
 	SDL_DestroyRenderer(sdl_renderer);
 	sdl_renderer = nullptr;
 }
@@ -27,6 +34,12 @@ bool Renderer::init() {
 	int imgFlags = IMG_INIT_PNG;
 	if (!(IMG_Init(imgFlags) & imgFlags)) {
 		Game::logger << "SDL_image failed to initialize!\n";
+		return false;
+	}
+
+	// Initialize ttf library
+	if (TTF_Init() == -1) {
+		Game::logger << "SDL_ttf failed to initialize!\n";
 		return false;
 	}
 
@@ -60,3 +73,22 @@ void Renderer::render() {
 
 	SDL_RenderPresent(sdl_renderer);
 }
+
+
+//void Renderer::createFont(std::string path, int size) {
+//
+//}
+//
+//
+//void Renderer::renderText(Text text) {
+//	TTF_Font * font = TTF_OpenFont("Arial.ttf", 12);
+//	if (font == NULL)
+//		return;
+//
+//	SDL_Surface * surface = TTF_RenderText_Blended(font, text.c_str(), {255, 255, 255});
+//	SDL_Texture * texture = SDL_CreateTextureFromSurface(sdl_renderer, surface);
+//
+//	SDL_FreeSurface(surface);
+//
+//	SDL_RenderCopy
+//}

@@ -10,7 +10,7 @@ Entity::Entity() {
 
 	zIndex = 0;
 	active = true;
-	visible = true;
+	transparency = 1.0;
 
 	// TODO remove this
 	Game::logger << "Creating an entity." << "\n";
@@ -23,12 +23,12 @@ Entity::~Entity() {
 
 
 void Entity::pretick() {
-
+	pos.set((float)Game::input->mouseX, (float)Game::input->mouseY);
 }
 
 
 void Entity::tick() {
-	pos.add(2, 1);
+
 }
 
 
