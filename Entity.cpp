@@ -1,6 +1,8 @@
 #include "Entity.h"
 #include "Game.h"
 
+// Test comment
+
 unsigned int Entity::entityIDCounter = 0;
 
 
