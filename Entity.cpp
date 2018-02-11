@@ -19,16 +19,18 @@ Entity::Entity() {
 
 
 Entity::~Entity() {
-
+	// TODO set children positions and remove parent's child
 }
 
-
 void Entity::pretick() {
-	pos.set((float)Game::input->mouseX, (float)Game::input->mouseY);
+	// TODO make this detect collisions and not just move primitively
+	pos = pos + vel;
+	vel = vel + acc; // TODO decide if vel should be increase before or after pos
 }
 
 
 void Entity::tick() {
+	//pos.set((float)Game::input->mouseX, (float)Game::input->mouseY); // TODO remove this
 
 }
 

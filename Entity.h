@@ -23,7 +23,7 @@
 class Entity {
 public:
 	Entity(); // TODO private constructors? Could that help?
-	~Entity();
+	virtual ~Entity();
 
 	static unsigned int entityIDCounter;
 	unsigned int entityID;
@@ -41,9 +41,12 @@ public:
 	std::weak_ptr<Entity> parent;
 	std::list<std::weak_ptr<Entity>> children;
 
-	void pretick();
-	void tick();
-	void posttick();
+	// Pretick is meant for physics and collisions, not game logic.
+	virtual void pretick();
+	// Tick is where game logic is updated and physics are reacted to.
+	virtual void tick();
+	// Posttick has little use as of now.
+	virtual void posttick();
 
 	// TODO remove these, make Rectangle fulfil these reponsibilities? Or nah?
 	//bool intersects(Entity & e);

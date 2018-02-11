@@ -1,6 +1,8 @@
 #include "World.h"
 #include "Game.h"
 
+#include "Player.h" // TODO remove this
+
 
 World::World() {
 
@@ -40,10 +42,14 @@ void World::init() {
 	//loadLevel();
 	//initializeLevel();
 	
-	Entity * e = new Entity();
-	e->pos.addX(100);
-	Game::world->createEntity(e);
-	Game::world->createEntity(new Entity());
+	// TODO remove this hardcoded adding player, should be done from a Level object
+	Player * p = new Player();
+	Game::world->createEntity(p);
+
+	//Entity * e = new Entity();
+	//e->pos.addX(100);
+	//Game::world->createEntity(e);
+	//Game::world->createEntity(new Entity());
 }
 
 
@@ -65,7 +71,9 @@ void World::run() {
 
 void World::tick() {
 	processInput();
+	
 
+	// TODO how to order ticks?
 	for (auto & e : entities) {
 		e->pretick();
 	}
