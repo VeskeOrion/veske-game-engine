@@ -1,0 +1,16 @@
+Debug
+Release
+
+# Log files
+*.txt
+
+# Library binaries
+*.dll
+
+# Visual Studio project files
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# Images
+*.png
