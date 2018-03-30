@@ -14,26 +14,31 @@ World::~World() {
 }
 
 
-Entity & World::createEntity(Entity * e) {
-	std::shared_ptr<Entity> esp(e);
-	entities.push_back(esp);
+std::shared_ptr<Entity> World::addEntity(Entity * e) {
+	std::shared_ptr<Entity> esp;
+	if (findEntity(e) == nullptr) {
+		esp.reset(e);
+		entities.push_back(esp);
+	}
 
-	return *esp;
+	return esp;
 }
 
 
-std::shared_ptr<Entity> World::findEntity(Entity & e) {
+std::shared_ptr<Entity> World::findEntity(Entity * e) {
 	std::shared_ptr<Entity> r;
 	for (auto i = entities.begin(); i != entities.end(); ++i) {
-		if ((*i)->entityID == e.entityID)
+		if ((*i)->entityID == e->entityID)
 			r = *i;
 	}
 	return r;
 }
 
 
-void World::destroyEntity(Entity * e) {
-	// TODO write this
+// Queues an entity deletion until the end of the update, when it is actually deleted
+void World::removeEntity(Entity * e) {
+	std::shared_ptr<Entity> r = findEntity(e);
+	deadEntities.push_back(r);
 }
 
 
@@ -42,14 +47,23 @@ void World::init() {
 	//loadLevel();
 	//initializeLevel();
 	
-	// TODO remove this hardcoded adding player, should be done from a Level object
-	Player * p = new Player();
-	Game::world->createEntity(p);
+	// PUT CODE FOR ADDING DEBUG ENTITIES HERE
 
-	//Entity * e = new Entity();
-	//e->pos.addX(100);
-	//Game::world->createEntity(e);
-	//Game::world->createEntity(new Entity());
+
+	// TODO remove this hardcoded adding player, should be done from a Level object
+	std::shared_ptr<Entity> p = Game::world->addEntity(new Player());
+	p->sprite.loadFromFile("colorful.png", 64, 64);
+	p->sprite.addAnim("fun", 1, true, {0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0});
+	p->sprite.setAnim("fun");
+	p->sprite.setAnim("goop");
+	//Game::world->removeEntity(p.get());
+
+	Game::logger << p->sprite.currentAnim.elapsed;
+
+	Entity * e = new Entity();
+	e->pos.addX(100);
+	Game::world->addEntity(e);
+	//Game::world->removeEntity(e);
 }
 
 
@@ -85,6 +99,11 @@ void World::tick() {
 	for (auto & e : entities) {
 		e->posttick();
 	}
+
+	// Remove dead entities
+	for (auto i : deadEntities)
+		entities.remove(i);
+	deadEntities.clear();
 
 	// TODO remove this, but if I have to put world testing things here
 	for (auto & k : Game::input->tapped)

@@ -20,7 +20,7 @@
 
 #define KEY_DOWN true
 #define KEY_UP false
- 
+
 
 struct Keypress {
 	bool down;
@@ -157,9 +157,11 @@ public:
 
 	bool init();
 
+	Vector getMousePos();
 	bool getKeyDown(Key key);
 	bool getKeyTapped(Key key);
 	unsigned int getKeyDownDuration(Key key);
+
 
 	void processInput();
 	void handleMouseMotion(SDL_Event & e);

@@ -31,17 +31,11 @@ public:
 
 	// Entity management
 	std::list<std::shared_ptr<Entity>> entities; // could this be an array?
+	std::list<std::shared_ptr<Entity>> deadEntities; // entities to be removed
 
-	Entity & createEntity(Entity * e);
-	std::shared_ptr<Entity> findEntity(Entity & e);
-	void destroyEntity(Entity * e);
-
-	// TODO so ugly, move?
-	//template <typename T, typename... Args>
-	//Entity & World::createEntity(Args&&... args) {
-	//  TODO this wont work I'm sure
-	//	std::shared_ptr<Entity> e = std::make_shared<Entity>(args);
-	//}
+	std::shared_ptr<Entity> addEntity(Entity * e);
+	void removeEntity(Entity * e);
+	std::shared_ptr<Entity> findEntity(Entity * e);
 
 	// Level management
 	// loadLevel
@@ -50,13 +44,13 @@ public:
 	// initializeLevel
 
 	// Loop Logic
-	bool done; // TODO figure out what to actaully make this
+	bool done; // TODO figure out what to actually make this
 	int gameTicks;
 	double startTime;
 	double currentTime;
 	double timeOfLastTick;
 	double accumulator;
-	const double desiredFrameRate = 60.0;
+	const double desiredFrameRate = 30.0;
 	const double desiredTickTime = 1000.0 / desiredFrameRate;
 
 	void init();

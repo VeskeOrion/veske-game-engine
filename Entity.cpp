@@ -7,19 +7,21 @@ unsigned int Entity::entityIDCounter = 0;
 
 Entity::Entity() {
 	entityID = entityIDCounter;
-	entityIDCounter++;
+	++entityIDCounter;
 
 	zIndex = 0;
 	active = true;
+	dead = false;
 	transparency = 1.0;
 
 	// TODO remove this
-	Game::logger << "Creating an entity." << "\n";
+	Game::logger << "Creating an entity.\n";
 }
 
 
 Entity::~Entity() {
 	// TODO set children positions and remove parent's child
+	Game::logger << "Destroying an entity.\n";
 }
 
 void Entity::pretick() {
@@ -30,8 +32,7 @@ void Entity::pretick() {
 
 
 void Entity::tick() {
-	//pos.set((float)Game::input->mouseX, (float)Game::input->mouseY); // TODO remove this
-
+	sprite.currentAnim.update();
 }
 
 

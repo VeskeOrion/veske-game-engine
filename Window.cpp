@@ -23,7 +23,7 @@ bool Window::init() {
 	// Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0) {
 		//GameLog::err("SDL failed to initialize!");
-		//GameLog::err(SDL_GetError());
+		//GameLog::err(SDL_GetError()); // TODO readd this
 		return false;
 	}
 
@@ -32,7 +32,7 @@ bool Window::init() {
 		SDL_WINDOWPOS_CENTERED, windowWidth, windowHeight, SDL_WINDOW_OPENGL);
 	if (sdl_window == nullptr) {
 		//GameLog::err("SDL failed to create a window!");
-		//GameLog::err(SDL_GetError());
+		//GameLog::err(SDL_GetError()); // TODO readd this
 		return false;
 	}
 

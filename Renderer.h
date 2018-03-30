@@ -12,11 +12,7 @@
 #define RENDERER_H
 
 
-#include <string>
-#include <memory>
-
 #include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
 
 
 class Renderer {
@@ -26,18 +22,13 @@ public:
 
 	SDL_Renderer * sdl_renderer;
 
+	const unsigned int scaleFactor = 3;
+
 	bool init();
 	void render();
-	void renderText(std::string text, int size);
 };
 
 
-class Text {
-	Text();
-	~Text();
 
-	TTF_Font * font;
-	std::string text;
-};
 
 #endif //RENDERER_H

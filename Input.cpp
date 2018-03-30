@@ -14,7 +14,7 @@ Input::~Input() {
 
 bool Input::init() {
 	// TODO delete this?
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 
 	return true;
 }
@@ -73,8 +73,13 @@ void Input::processInput() {
 }
 
 
+Vector Input::getMousePos() {
+	Vector v((float)mouseX, (float)mouseY);
+	return v;
+}
+
+
 void Input::handleMouseMotion(SDL_Event & e) {
-	//Game::logger << "Motion: x=" << e.motion.x << ", y= " << e.motion.y << "\n";
 	mouseX = e.motion.x;
 	mouseY = e.motion.y;
 }

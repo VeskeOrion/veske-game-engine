@@ -17,7 +17,7 @@
 #include <memory>
 
 #include "Math.h"
-#include "Image.h"
+#include "Sprite.h"
 
 
 class Entity {
@@ -28,14 +28,18 @@ public:
 	static unsigned int entityIDCounter;
 	unsigned int entityID;
 
-	Vector pos; // Position
+	Vector pos; // Position, top left
 	Vector vel; // Velocity
 	Vector acc; // Acceleration
+	float drag = 0.0f;
 
-	Image image;
+	Vector size; // AABB size
+
+	Sprite sprite;
 	int zIndex;
 
 	bool active;
+	bool dead;
 	float transparency;
 
 	std::weak_ptr<Entity> parent;

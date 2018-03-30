@@ -51,44 +51,24 @@ void Renderer::render() {
 	SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(sdl_renderer);
 
+	// render entiries
 	SDL_Rect src;
 	SDL_Rect dst;
-
-	auto i = Game::world->entities.begin();
 	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
 		Entity & cur = **i;
 
-		src.x = 0; // these will change with anim frames
-		src.y = 0; // these will change with anim frames
-		src.w = cur.image.w; // these will probably stay the same
-		src.h = cur.image.h; // these will probably stay the same
+		src.x = cur.sprite.w * cur.sprite.currentAnim.currentFrame(); // these will change with anim frames
+		src.y = cur.sprite.h * cur.sprite.currentAnim.yoff; // these will change with anim frames
+		src.w = cur.sprite.w; // these will probably stay the same
+		src.h = cur.sprite.h; // these will probably stay the same
 
-		dst.x = cur.pos.x() + cur.image.offx;
-		dst.y = cur.pos.y() + cur.image.offy;
-		dst.w = cur.image.w; // these will probably stay the same
-		dst.h = cur.image.h; // these will probably stay the same
+		dst.x = (cur.pos.x() + cur.sprite.offx) * scaleFactor;
+		dst.y = (cur.pos.y() + cur.sprite.offy) * scaleFactor;
+		dst.w = cur.sprite.w * scaleFactor; // these will probably stay the same
+		dst.h = cur.sprite.h * scaleFactor; // these will probably stay the same
 
-		SDL_RenderCopy(sdl_renderer, (*i)->image.sdl_texture, &src, &dst);
+		SDL_RenderCopy(sdl_renderer, (*i)->sprite.sdl_texture, &src, &dst);
 	}
 
 	SDL_RenderPresent(sdl_renderer);
 }
-
-
-//void Renderer::createFont(std::string path, int size) {
-//
-//}
-//
-//
-//void Renderer::renderText(Text text) {
-//	TTF_Font * font = TTF_OpenFont("Arial.ttf", 12);
-//	if (font == NULL)
-//		return;
-//
-//	SDL_Surface * surface = TTF_RenderText_Blended(font, text.c_str(), {255, 255, 255});
-//	SDL_Texture * texture = SDL_CreateTextureFromSurface(sdl_renderer, surface);
-//
-//	SDL_FreeSurface(surface);
-//
-//	SDL_RenderCopy
-//}
