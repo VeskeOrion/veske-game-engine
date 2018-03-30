@@ -37,10 +37,10 @@ public:
 
 	Sprite sprite;
 	int zIndex;
+	bool visible;
+	float alpha;
 
 	bool active;
-	bool dead;
-	float transparency;
 
 	std::weak_ptr<Entity> parent;
 	std::list<std::weak_ptr<Entity>> children;
@@ -51,6 +51,8 @@ public:
 	virtual void tick();
 	// Posttick has little use as of now.
 	virtual void posttick();
+
+	virtual void kill();
 
 	// TODO remove these, make Rectangle fulfil these reponsibilities? Or nah?
 	//bool intersects(Entity & e);

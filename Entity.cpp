@@ -10,9 +10,10 @@ Entity::Entity() {
 	++entityIDCounter;
 
 	zIndex = 0;
+	visible = true;
+	alpha = 1.0;
+
 	active = true;
-	dead = false;
-	transparency = 1.0;
 
 	// TODO remove this
 	Game::logger << "Creating an entity.\n";
@@ -28,6 +29,8 @@ void Entity::pretick() {
 	// TODO make this detect collisions and not just move primitively
 	pos = pos + vel;
 	vel = vel + acc; // TODO decide if vel should be increase before or after pos
+	
+	// TODO apply drag
 }
 
 
@@ -38,4 +41,9 @@ void Entity::tick() {
 
 void Entity::posttick() {
 
+}
+
+
+void Entity::kill() {
+	Game::world->removeEntity(this);
 }

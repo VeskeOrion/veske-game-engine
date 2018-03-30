@@ -57,17 +57,19 @@ void Renderer::render() {
 	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
 		Entity & cur = **i;
 
-		src.x = cur.sprite.w * cur.sprite.currentAnim.currentFrame(); // these will change with anim frames
-		src.y = cur.sprite.h * cur.sprite.currentAnim.yoff; // these will change with anim frames
-		src.w = cur.sprite.w; // these will probably stay the same
-		src.h = cur.sprite.h; // these will probably stay the same
+		if (cur.visible && cur.active) {
+			src.x = cur.sprite.w * cur.sprite.currentAnim.currentFrame(); // these will change with anim frames
+			src.y = cur.sprite.h * cur.sprite.currentAnim.yoff; // these will change with anim frames
+			src.w = cur.sprite.w; // these will probably stay the same
+			src.h = cur.sprite.h; // these will probably stay the same
 
-		dst.x = (cur.pos.x() + cur.sprite.offx) * scaleFactor;
-		dst.y = (cur.pos.y() + cur.sprite.offy) * scaleFactor;
-		dst.w = cur.sprite.w * scaleFactor; // these will probably stay the same
-		dst.h = cur.sprite.h * scaleFactor; // these will probably stay the same
+			dst.x = (cur.pos.x() + cur.sprite.offx) * scaleFactor;
+			dst.y = (cur.pos.y() + cur.sprite.offy) * scaleFactor;
+			dst.w = cur.sprite.w * scaleFactor; // these will probably stay the same
+			dst.h = cur.sprite.h * scaleFactor; // these will probably stay the same
 
-		SDL_RenderCopy(sdl_renderer, (*i)->sprite.sdl_texture, &src, &dst);
+			SDL_RenderCopy(sdl_renderer, (*i)->sprite.sdl_texture, &src, &dst);
+		}
 	}
 
 	SDL_RenderPresent(sdl_renderer);

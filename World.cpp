@@ -53,9 +53,12 @@ void World::init() {
 	// TODO remove this hardcoded adding player, should be done from a Level object
 	std::shared_ptr<Entity> p = Game::world->addEntity(new Player());
 	p->sprite.loadFromFile("colorful.png", 64, 64);
-	p->sprite.addAnim("fun", 1, true, {0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0});
+	p->sprite.addAnim("fun", 0, true, {0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0});
 	p->sprite.setAnim("fun");
-	p->sprite.setAnim("goop");
+	p->sprite.addAnim("fun2", 0, false, {0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3});
+	//p->sprite.setAnim("fun");
+	//p->sprite.setAnim("fun");
+	p->active = true;
 	//Game::world->removeEntity(p.get());
 
 	Game::logger << p->sprite.currentAnim.elapsed;
@@ -89,15 +92,21 @@ void World::tick() {
 
 	// TODO how to order ticks?
 	for (auto & e : entities) {
-		e->pretick();
+		if (e->active) {
+			e->pretick();
+		}
 	}
 
 	for (auto & e : entities) {
-		e->tick();
+		if (e->active) {
+			e->tick();
+		}
 	}
 
 	for (auto & e : entities) {
-		e->posttick();
+		if (e->active) {
+			e->posttick();
+		}
 	}
 
 	// Remove dead entities
