@@ -1,5 +1,8 @@
 Debug
 Release
+.vs
+MyGame/Debug
+MyGame/Release
 
 # Log files
 *.txt
@@ -11,6 +14,9 @@ Release
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.db
+*.sdf
+*.sln
 
 # Images
 *.png
