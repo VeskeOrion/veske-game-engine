@@ -7,6 +7,34 @@
 #include "Entity.h"
 
 
+Camera::Camera() {
+
+}
+
+
+Camera::~Camera() {
+	target = nullptr;
+}
+
+
+void Camera::init() {
+	pos.reset();
+
+	follow = false;
+	target = nullptr;
+	off.reset();
+}
+
+
+void Camera::update() {
+	// Center camera on target
+	if (follow && target != nullptr) {
+		pos.set(target->pos.xf() + target->size.xf() / 2 - Game::window->windowWidth / Game::renderer->scaleFactor / 2 + off.xf(),
+				target->pos.yf() + target->size.yf() / 2 - Game::window->windowHeight / Game::renderer->scaleFactor / 2 + off.yf());
+	}
+}
+
+
 Renderer::Renderer() {
 
 }
@@ -43,15 +71,19 @@ bool Renderer::init() {
 		return false;
 	}
 
+	camera.init();
+
 	return true;
 }
 
 
 void Renderer::render() {
+	camera.update();
+
 	SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(sdl_renderer);
 
-	// render entiries
+	// render entities
 	SDL_Rect src;
 	SDL_Rect dst;
 	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
@@ -61,16 +93,20 @@ void Renderer::render() {
 			src.x = cur.sprite.w * cur.sprite.currentAnim.currentFrame();
 			src.y = cur.sprite.h * cur.sprite.currentAnim.yoff;
 			src.w = cur.sprite.w;
-			src.h = cur.sprite.h; 
+			src.h = cur.sprite.h;
 
-			dst.x = (cur.pos.x() + cur.sprite.offx) * scaleFactor;
-			dst.y = (cur.pos.y() + cur.sprite.offy) * scaleFactor;
+			// The destination here is scaled up by scaleFactor (usually 3)
+			dst.x = (cur.pos.x() + cur.sprite.offx - camera.pos.x()) * scaleFactor;
+			dst.y = (cur.pos.y() + cur.sprite.offy - camera.pos.y()) * scaleFactor;
 			dst.w = cur.sprite.w * scaleFactor;
 			dst.h = cur.sprite.h * scaleFactor;
 
 			SDL_RenderCopy(sdl_renderer, (*i)->sprite.sdl_texture, &src, &dst);
 		}
 	}
+
+	// render ui
+	// TODO make UI
 
 	SDL_RenderPresent(sdl_renderer);
 }

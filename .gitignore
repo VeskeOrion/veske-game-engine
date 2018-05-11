@@ -17,6 +17,7 @@ MyGame/Release
 *.db
 *.sdf
 *.sln
+*.opendb
 
 # Images
 *.png

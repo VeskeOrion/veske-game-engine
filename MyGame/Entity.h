@@ -30,10 +30,10 @@ public:
 
 	std::string name;
 
-	Vector pos; // Position, top left
-	Vector vel; // Velocity
-	Vector acc; // Acceleration
-	Vector drag; // Decceleration ratio
+	Vector pos; // Position (top left), affected by vel, and can be set
+	Vector vel; // Velocity, affects pos, affected by acc, and can be set
+	Vector acc; // Acceleration, can be set
+	Vector drag; // Decceleration, affects vel, can be set
 
 	Vector size; // AABB size
 
@@ -44,14 +44,17 @@ public:
 
 	bool active;
 
-	std::weak_ptr<Entity> parent;
-	std::list<std::weak_ptr<Entity>> children;
 
-	// Pretick is for collisions, animations, and "enginey" stuff
+	// TODO worry about parenting and children
+	//std::weak_ptr<Entity> parent;
+	//std::list<std::weak_ptr<Entity>> children;
+
+	// Pretick is for collisions, animations updates, and "enginey" stuff
 	virtual void pretick();
 
-	// Tick is where game logic is updated and physics are reacted to. Always call
-	// Entity::tick() as the first thing you do when overriding this function.
+	// Tick is where game logic is updated and physics are reacted to, and where
+	// animations are assigned. Always call Entity::tick() as the first thing you
+	// do when overriding this function.
 	virtual void tick();
 
 	// Posttick has little use as of now.

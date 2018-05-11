@@ -78,6 +78,8 @@ public:
 	Vector center();
 };
 
+float random();
+float random(float lower, float upper);
 
 float moveTo(float value, float desired, float step);
 float clamp(float value, float first, float second);

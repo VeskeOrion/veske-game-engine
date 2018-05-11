@@ -25,14 +25,18 @@ public:
 	Animation();
 	Animation(int yoff, bool loop, std::initializer_list<int> frames);
 	
+	std::string name;
+
 	int yoff; // how far down the spritesheet an animation is located
 	bool loop; // if an animation should loop when it has reached its final frame
 	std::vector<int> frames; // a vector of x indices along the spritesheet that are played in order
 	
 	unsigned int elapsed; // how many frames of the animation have played so far
 
+	void init();
+	void setup(int yoff, bool loop, std::initializer_list<int> frames);
 	void update(); // increments the elapsed variable and resets it to 0 if this anim loops
-	void reset(); // restarts the animation from the beggining
+	void replay(); // restarts the animation from the beggining
 	int currentFrame(); // returns the x index along the spriteshite, aka the index of the current frame
 };
 
@@ -42,9 +46,6 @@ public:
 	Sprite();
 	Sprite(std::string & path, int w, int h);
 	~Sprite();
-
-	static unsigned int textureIDCounter;
-	unsigned int textureID;
 
 	std::string path;
 	SDL_Texture * sdl_texture;
@@ -58,6 +59,7 @@ public:
 
 	void addAnim(const std::string & name, int yoff, bool loop, std::initializer_list<int> frames);
 	void setAnim(const std::string & name);
+	void clearAnims();
 
 	void init();
 	bool loadFromFile(const std::string & path, int w, int h);

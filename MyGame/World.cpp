@@ -1,7 +1,7 @@
 #include "World.h"
 #include "Game.h"
 
-#include "Player.h" // TODO remove this
+#include "Player.h" // TODO remove this, this is for debug testing by spawning players
 
 
 World::World() {
@@ -26,7 +26,7 @@ std::shared_ptr<Entity> World::addEntity(Entity * e) {
 
 
 std::shared_ptr<Entity> World::findEntity(Entity * e) {
-	std::shared_ptr<Entity> r;
+	std::shared_ptr<Entity> r = nullptr;
 	for (auto i = entities.begin(); i != entities.end(); ++i) {
 		if ((*i)->entityID == e->entityID)
 			r = *i;
@@ -36,7 +36,7 @@ std::shared_ptr<Entity> World::findEntity(Entity * e) {
 
 
 std::shared_ptr<Entity> World::findEntity(const std::string & name) {
-	std::shared_ptr<Entity> r;
+	std::shared_ptr<Entity> r = nullptr;
 	for (auto i = entities.begin(); i != entities.end(); ++i) {
 		if ((*i)->name.compare(name) == 0)
 			r = *i;
@@ -57,29 +57,40 @@ void World::init() {
 	//loadLevel();
 	//initializeLevel();
 	
-	// PUT CODE FOR ADDING DEBUG ENTITIES HERE
+	////**************************************************************************////
+	// PUT DEBUG WORLD INITIALIZATION CODE HERE
 
 	Entity * e = new Entity();
 	e->pos.addX(100);
 	Game::world->addEntity(e);
+	e->name = "Entity";
+	e->sprite.loadFromFile("colorful.png", 64, 64);
+	e->sprite.addAnim("fun", 0, true, {0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0});
+	e->sprite.setAnim("fun");
 
 	// TODO remove this hardcoded adding player, should be done from a Level object
 	std::shared_ptr<Entity> p = Game::world->addEntity(new Player());
-	p->sprite.loadFromFile("colorful.png", 64, 64);
-	p->sprite.addAnim("fun", 0, true, {0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0});
-	p->sprite.addAnim("fun2", 0, false, {0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3});
-	//p->sprite.setAnim("fun2");
-	p->sprite.setAnim("fun");
 	p->name = "Player";
-	//p->active = true;
+	p->drag.set(1.0f, 1.0f);
 	p->sprite.loadFromFile("Character.png", 48, 48);
-	p->drag.set(.3f, .3f);
+	p->size.set(48, 48);
+
+	//p->sprite.loadFromFile("Character.png", 48, 48);
+	//p->sprite.setAnim("fun");
+
+	//p->sprite.addAnim("fun2", 0, false, {0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3});
+	//p->sprite.loadFromFile("Character.png", 48, 48);
+
+	//for (int i = 0; i < 100; ++i) {
+	//	std::shared_ptr<Entity> k = Game::world->addEntity(new Player());
+	//	k->pos.set((int)random(-200.0f, 200.0f), (int)random(-200.0f, 200.0f));
+	//	k->sprite.loadFromFile("Character.png", 48, 48);
+	//	k->drag.set(.3f, .3f);
+	//}
 	//Game::world->removeEntity(p.get());
 
-	Game::logger << p->vel.x() << " " << p->vel.y();
-	//Game::logger << p->sprite.currentAnim.elapsed;
-
-	//Game::world->removeEntity(e);
+	// PUT DEBUG WORLD INITIALIZATION CODE HERE
+	////**************************************************************************////
 }
 
 
@@ -102,7 +113,6 @@ void World::run() {
 void World::tick() {
 	processInput();
 	
-
 	// TODO how to order ticks?
 	for (auto & e : entities) {
 		if (e->active) {
@@ -127,10 +137,22 @@ void World::tick() {
 		entities.remove(i);
 	deadEntities.clear();
 
+	////**************************************************************************////
+	// PUT DEBUG WORLD LOOP CODE HERE
+
 	// TODO remove this, but if I have to put world testing things here
 	//for (auto & k : Game::input->tappedKeys)
 		//Game::logger << k << "\n";
-	Game::logger << findEntity("Player")->vel.x() << " " << findEntity("Player")->vel.y() << "\n";
+	//Game::logger << findEntity("Player")->pos.xf() << " " << findEntity("Player")->pos.yf() << "\n";
+	//
+	//if (entities.size() > 0)
+	//	entities.back()->kill();
+	//Game::logger << random() << "\n";
+
+	//Game::logger << e->sprite.currentAnim.elapsed;
+
+	// PUT DEBUG WORLD LOOP CODE HERE
+	////**************************************************************************////
 }
 
 

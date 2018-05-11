@@ -1,7 +1,8 @@
 #include "Math.h"
 #include <cmath>
 #include <cstdlib>
-
+#include <ctime>
+#include <random>
 
 Vector::Vector() {
 	reset();
@@ -153,6 +154,14 @@ Rectangle::Rectangle() {
 
 
 Rectangle::Rectangle(int x1, int y1, int x2, int y2) {
+	if (x2 > x1) {
+		int temp = x2;
+		x2 = x1;
+		x1 = temp;
+	}
+	if (y2 > y1) {
+		
+	}
 	set(x1, y1, x2, y2);
 }
 
@@ -235,11 +244,24 @@ Vector Rectangle::intersectsAt(Rectangle & rect) {
 	return v;
 }
 
+
 Vector Rectangle::center() {
 	// TODO find out if this works while i figure out if i should make +Y up or down
 	Vector v((mX2 - mX1)/2.0f, (mY2 - mY1)/2.0f);
 	return v;
 }
+
+
+float random() {
+	static std::mt19937 generator((unsigned int) time((time_t) 0));
+	return (float) generator() / (float) generator.max();
+}
+
+
+float random(float lower, float upper) {
+	return lower + random() * (upper - lower);
+}
+
 
 float moveTo(float value, float desired, float step) {
 	if (value > desired)
@@ -249,6 +271,7 @@ float moveTo(float value, float desired, float step) {
 	}
 	return value;
 }
+
 
 float clamp(float value, float first, float second) {
 	if (first < second) {

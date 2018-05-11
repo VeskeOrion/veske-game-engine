@@ -31,22 +31,10 @@ void Entity::pretick() {
 	vel = vel + acc;
 	pos = pos + vel;
 	
-	// Now apply drag
-	//float newX = 0.0f;
-	//float newY = 0.0f;
-
-	//if (vel.xf() > 0.0f)
-	//	newX = (vel.xf() - drag.xf() > 0.0f)? vel.xf() - drag.xf() : 0.0f;
-	//else if (vel.x() < 0.0f)
-	//	newX = (vel.xf() + drag.xf() < 0.0f)? vel.xf() + drag.xf() : 0.0f;
-
-	//if (vel.y() > 0.0f)
-	//	newY = (vel.yf() - drag.yf() > 0.0f)? vel.yf() - drag.yf() : 0.0f;
-	//else if (vel.y() < 0.0f)
-	//	newY = (vel.yf() + drag.yf() < 0.0f)? vel.yf() + drag.yf() : 0.0f;
-
+	// Apply drag
 	vel.set(moveTo(vel.xf(), 0.0f, drag.xf()), moveTo(vel.yf(), 0.0f, drag.yf()));
 
+	// Update animation frame
 	sprite.currentAnim.update();
 }
 
