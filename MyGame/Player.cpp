@@ -14,8 +14,7 @@ void Player::tick() {
 	Entity::tick();
 
 	// TODO this should be done in a INIT not TICK
-	Game::renderer->camera.target = Game::world->findEntity(this);
-	Game::renderer->camera.follow = true;
+	Game::renderer->camera.follow(thisEntity);
 
 	//acc.set(0.0f, 0.0f);
 	if (Game::input->getMovementAxes().xf() != 0)

@@ -25,6 +25,8 @@ public:
 	Entity(); // TODO private constructors? Could that help?
 	virtual ~Entity();
 
+	std::weak_ptr<Entity> thisEntity; // a pointer to this entity in the World's entity lsit
+
 	static unsigned int entityIDCounter;
 	unsigned int entityID;
 
@@ -44,6 +46,7 @@ public:
 
 	bool active;
 
+	// TODO give Entity an Init function (like Unity's Start) called when world inits after lvel load, GENIUS!
 
 	// TODO worry about parenting and children
 	//std::weak_ptr<Entity> parent;

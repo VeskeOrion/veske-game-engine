@@ -13,25 +13,51 @@ Camera::Camera() {
 
 
 Camera::~Camera() {
-	target = nullptr;
+
 }
 
 
 void Camera::init() {
 	pos.reset();
 
-	follow = false;
-	target = nullptr;
-	off.reset();
+	isFollowing = false;
+	target.reset();
+	followOffset.reset();
 }
 
 
 void Camera::update() {
 	// Center camera on target
-	if (follow && target != nullptr) {
-		pos.set(target->pos.xf() + target->size.xf() / 2 - Game::window->windowWidth / Game::renderer->scaleFactor / 2 + off.xf(),
-				target->pos.yf() + target->size.yf() / 2 - Game::window->windowHeight / Game::renderer->scaleFactor / 2 + off.yf());
+	// TODO this update call happens every time Render is called
+	// this could be bad
+	// I need to add in that extrapolation feature in renderer
+	// Camera would have to take advantage of that too or it would fall behind :C
+	if (auto targetLock = target.lock()) {
+		Vector windowSize((float)Game::window->windowWidth / Game::renderer->scaleFactor, 
+						  (float)Game::window->windowHeight / Game::renderer->scaleFactor);
+
+		// TODO make camera following smooth
+		pos = targetLock->pos + followOffset + (targetLock->size - windowSize) / 2;
 	}
+
+	// TODO shaking can happen here, with random perturbations in camera position
+}
+
+
+void Camera::moveTo(Vector to) {
+	isFollowing = false;
+	target.reset();
+
+	Vector windowSize((float)Game::window->windowWidth / Game::renderer->scaleFactor,
+						(float)Game::window->windowHeight / Game::renderer->scaleFactor);
+
+	pos = to - windowSize / 2;
+}
+
+
+void Camera::follow(std::weak_ptr<Entity> targ) {
+	target = targ;
+	isFollowing = true;
 }
 
 

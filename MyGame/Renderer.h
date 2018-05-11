@@ -27,12 +27,17 @@ public:
 
 	Vector pos;
 
-	bool follow;
-	std::shared_ptr<Entity> target;
-	Vector off;
+	bool isFollowing;
+	std::weak_ptr<Entity> target;
+	Vector followOffset;
 
 	void init();
 	void update();
+
+	void follow(std::weak_ptr<Entity> targ);
+	void moveTo(Vector to);
+
+	//TODO add shake function, with duration, magnitude, etc
 };
 
 class Renderer {

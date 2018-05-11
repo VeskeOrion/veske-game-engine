@@ -18,6 +18,7 @@ std::shared_ptr<Entity> World::addEntity(Entity * e) {
 	std::shared_ptr<Entity> esp;
 	if (findEntity(e) == nullptr) {
 		esp.reset(e);
+		esp->thisEntity = esp; // assigns the thisEntity pointer in the entity
 		entities.push_back(esp);
 	}
 
@@ -133,8 +134,9 @@ void World::tick() {
 	}
 
 	// Remove dead entities
-	for (auto i : deadEntities)
+	for (auto i : deadEntities) {
 		entities.remove(i);
+	}
 	deadEntities.clear();
 
 	////**************************************************************************////
