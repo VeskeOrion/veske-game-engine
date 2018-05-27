@@ -44,7 +44,7 @@ public:
 class Sprite {
 public:
 	Sprite();
-	Sprite(std::string & path, int w, int h);
+	Sprite(const std::string & path, int w, int h);
 	~Sprite();
 
 	std::string path;

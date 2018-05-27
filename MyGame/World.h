@@ -59,6 +59,9 @@ public:
 	void tick();
 	void render();
 	void processInput();
+
+	void populateCollisionLists();
+
 	void initializeGameTime();
 	bool readyToTick();
 	void updateGameTime();

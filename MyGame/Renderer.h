@@ -25,6 +25,9 @@ public:
 	Camera();
 	~Camera();
 
+	float zoom;
+	const float defaultZoom = 3.0f;
+
 	Vector pos;
 
 	bool isFollowing;
@@ -47,15 +50,15 @@ public:
 
 	Camera camera;
 
-	// TODO renderer should keep a bank of image objects so that a single image doesnt
-	// need to be loaded multiple times
+	//std::list<std::shared_ptr<Sprite>> sprites;
 
 	SDL_Renderer * sdl_renderer;
 
-	const unsigned int scaleFactor = 3;
-
 	bool init();
 	void render();
+
+	//std::shared_ptr<Sprite> createSprite(const std::string & path, int w, int h);
+	//std::shared_ptr<Sprite> findSprite(const std::string & path);
 };
 
 

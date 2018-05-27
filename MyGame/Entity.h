@@ -22,10 +22,15 @@
 
 class Entity {
 public:
+
+	enum CollisionType { KINEMATIC, STRONG, WEAK, TRIGGER, NONE };
+
 	Entity(); // TODO private constructors? Could that help?
 	virtual ~Entity();
 
 	std::weak_ptr<Entity> thisEntity; // a pointer to this entity in the World's entity lsit
+
+	std::list<std::shared_ptr<Entity>> collisionList;
 
 	static unsigned int entityIDCounter;
 	unsigned int entityID;
@@ -37,9 +42,12 @@ public:
 	Vector acc; // Acceleration, can be set
 	Vector drag; // Decceleration, affects vel, can be set
 
+	bool useGravity;
+
 	Vector size; // AABB size
 
 	Sprite sprite;
+	//std::shared_ptr<Sprite> sprite;
 	int zIndex;
 	bool visible;
 	float alpha;

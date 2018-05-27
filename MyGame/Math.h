@@ -9,6 +9,7 @@
 #ifndef MATH_H
 #define MATH_H
 
+enum Orientation { ORIENTATION_UP, ORIENTATION_DOWN, ORIENTATION_LEFT, ORIENTATION_RIGHT }; // up, down, left, right
 
 class Vector {
 private:

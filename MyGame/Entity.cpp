@@ -34,7 +34,7 @@ void Entity::pretick() {
 	// Apply drag
 	vel.set(moveTo(vel.xf(), 0.0f, drag.xf()), moveTo(vel.yf(), 0.0f, drag.yf()));
 
-	// Update animation frame
+	// Update animation frame // TODO should this be at the end of tick?
 	sprite.currentAnim.update();
 }
 

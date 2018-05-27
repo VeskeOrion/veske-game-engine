@@ -10,7 +10,6 @@ public:
 	Player();
 	~Player();
 
-
 	void tick();
 };
 

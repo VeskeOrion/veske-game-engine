@@ -10,7 +10,7 @@ Sprite::Sprite() {
 }
 
 
-Sprite::Sprite(std::string & path, int w, int h) {
+Sprite::Sprite(const std::string & path, int w, int h) {
 	init();
 	loadFromFile(path, w, h);
 }

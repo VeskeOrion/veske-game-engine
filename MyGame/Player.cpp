@@ -17,10 +17,12 @@ void Player::tick() {
 	Game::renderer->camera.follow(thisEntity);
 
 	//acc.set(0.0f, 0.0f);
+
+	// TODO actually determine how to set speed of player
 	if (Game::input->getMovementAxes().xf() != 0)
-		vel.setX(moveTo(vel.xf(), Game::input->getMovementAxes().xf() * 4, 2.0f));
+		vel.setX(moveTo(vel.xf(), Game::input->getMovementAxes().xf() * 4.3127771f, 2.213f));
 	if (Game::input->getMovementAxes().yf() != 0)
-		vel.setY(moveTo(vel.yf(), Game::input->getMovementAxes().yf() * 4, 2.0f));
+		vel.setY(moveTo(vel.yf(), Game::input->getMovementAxes().yf() * 4.3127771f, 2.213f));
 	//if (Game::input->getRawKey(Input::RawKey::A)) {
 	//	acc.setX(-2.0f);
 	//}
