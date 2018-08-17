@@ -40,6 +40,9 @@ public:
 	void follow(std::weak_ptr<Entity> targ);
 	void moveTo(Vector to);
 
+	Vector worldToCamera(Vector point);
+	Vector screenToWorld(Vector point);
+
 	//TODO add shake function, with duration, magnitude, etc
 };
 

@@ -18,7 +18,6 @@
 #include <memory>
 #include <chrono>
 #include <ctime>
-#include <thread>
 
 
 // TODO should I make this multithreaded so it can write to files without delaying game?

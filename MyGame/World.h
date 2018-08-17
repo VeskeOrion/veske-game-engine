@@ -33,9 +33,9 @@ public:
 	std::list<std::shared_ptr<Entity>> entities; // could this be an array?
 	std::list<std::shared_ptr<Entity>> deadEntities; // entities to be removed
 
-	std::shared_ptr<Entity> addEntity(Entity * e);
-	void removeEntity(Entity * e);
-	std::shared_ptr<Entity> findEntity(Entity * e);
+	std::shared_ptr<Entity> addEntity(std::shared_ptr<Entity> e);
+	void removeEntity(std::shared_ptr<Entity> e);
+	std::shared_ptr<Entity> findEntity(std::shared_ptr<Entity> e);
 	std::shared_ptr<Entity> findEntity(const std::string & name);
 
 	// Level management

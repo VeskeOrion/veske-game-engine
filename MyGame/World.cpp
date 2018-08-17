@@ -1,8 +1,9 @@
 #include "World.h"
 #include "Game.h"
 
-#include "Entity.h"
+#include "Entity.h" // TODO remove this, this is for debug testing by spawning players
 #include "Player.h" // TODO remove this, this is for debug testing by spawning players
+#include "Terrain.h" // TODO remove this, this is for debug testing by spawning players
 #include "Collision.h"
 
 
@@ -16,23 +17,29 @@ World::~World() {
 }
 
 
-std::shared_ptr<Entity> World::addEntity(Entity * e) {
-	std::shared_ptr<Entity> esp;
+std::shared_ptr<Entity> World::addEntity(std::shared_ptr<Entity> e) {
 	if (findEntity(e) == nullptr) {
-		esp.reset(e);
-		esp->thisEntity = esp; // assigns the thisEntity pointer in the entity
-		entities.push_back(esp);
+		e->thisEntity = e; // assigns the thisEntity pointer in the entity to the global one
+		entities.push_back(e);
 	}
 
-	return esp;
+	return e;
 }
 
 
-std::shared_ptr<Entity> World::findEntity(Entity * e) {
+// Queues an entity deletion until the end of the update, when it is actually deleted
+void World::removeEntity(std::shared_ptr<Entity> e) {
+	std::shared_ptr<Entity> foundEntity = findEntity(e);
+	if (foundEntity)
+		deadEntities.push_back(foundEntity);
+}
+
+
+std::shared_ptr<Entity> World::findEntity(std::shared_ptr<Entity> e) {
 	std::shared_ptr<Entity> r = nullptr;
-	for (auto i = entities.begin(); i != entities.end(); ++i) {
-		if ((*i)->entityID == e->entityID)
-			r = *i;
+	for (auto i : entities) {
+		if (i->entityID == e->entityID)
+			r = i;
 	}
 	return r;
 }
@@ -48,13 +55,6 @@ std::shared_ptr<Entity> World::findEntity(const std::string & name) {
 }
 
 
-// Queues an entity deletion until the end of the update, when it is actually deleted
-void World::removeEntity(Entity * e) {
-	std::shared_ptr<Entity> r = findEntity(e);
-	deadEntities.push_back(r);
-}
-
-
 void World::init() {
 	//setLevel();
 	//loadLevel();
@@ -66,59 +66,51 @@ void World::init() {
 
 	// TODO remove this hardcoded adding player, should be done from a Level object
 
-	//p->sprite.loadFromFile("Character.png", 48, 48);
-	//p->sprite.setAnim("fun");
-
-	//p->sprite.addAnim("fun2", 0, false, {0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3});
-	//p->sprite.loadFromFile("Character.png", 48, 48);
-	//Entity * e = new Entity();
-	//e->pos.addX(100);
-	//Game::world->addEntity(e);
-	//e->name = "Entity";
-	//e->sprite.loadFromFile("colorful.png", 64, 64);
-	//e->sprite.addAnim("fun", 0, true, {0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0});
-	//e->sprite.setAnim("fun");
-
 	for (int i = 0; i < 20; ++i) {
-		Entity * e = new Entity();
-		std::shared_ptr<Entity> k = Game::world->addEntity(e);
-			e->name = "";
-			e->name = "Entity" + std::to_string(i);
+		std::shared_ptr<Entity> k(new Entity());
+		Game::world->addEntity(k);
+		//k->useGravity = true;
 
 		if (random() > 0.95f) {
-			e->pos.addX(100);
-			e->sprite.loadFromFile("colorful.png", 64, 64);
-			e->size.set(64, 64);
+			k->pos.addX(100);
+			k->sprite.loadFromFile("colorful.png", 64, 64);
+			k->size.set(64, 64);
 			if (random() > 0.5f)
-				e->sprite.addAnim("fun", 0, true, { 0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0 });
+				k->sprite.addAnim("fun", 0, true, { 0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0 });
 			else
-				e->sprite.addAnim("fun", 0, true, { 0,1,1,2,2,2,2,2,3,3,2,2,2,3,2,1,0,0,1,1 });
-			e->sprite.setAnim("fun");
+				k->sprite.addAnim("fun", 0, true, { 0,1,1,2,2,2,2,2,3,3,2,2,2,3,2,1,0,0,1,1 });
+			k->sprite.setAnim("fun");
 		}
 		else if (random() > 0.5f) {
-			e->sprite.loadFromFile("Wheel.png", 8, 8);
-			e->size.set(8, 8);
+			k->sprite.loadFromFile("Wheel.png", 8, 8);
+			k->size.set(8, 8);
 		}
 		else {
 			k->sprite.loadFromFile("Character.png", 48, 48);
-			e->size.set(48, 48);
+			k->size.set(48, 48);
 		}
 
-		e->pos.set(random(-200.0f, 200.0f), random(-200.0f, 200.0f));
+		k->pos.set(random(-200.0f, 200.0f), random(-200.0f, 200.0f));
 	}
 	//Game::world->removeEntity(p.get());
 
-	std::shared_ptr<Entity> p = Game::world->addEntity(new Player());
+	std::shared_ptr<Player> p(new Player());
+	Game::world->addEntity(p);
 	p->name = "Player";
 	p->drag.set(1.0f, 1.0f);
 	p->sprite.loadFromFile("Colorful.png", 64, 64);
 	p->size.set(64, 64);
 
-	Terrain t;
-	for (unsigned int i = 0; i < t.heightMap.size(); ++i) {
-		Game::logger << t.heightMap.at(i);
+	std::shared_ptr<Terrain> t(new Terrain());
+	Game::world->addEntity(t);
+	t->name = "Terrain";
+	t->generateRandomSmoothTerrain(500,1);
+	t->sprite.loadFromFile("FlatTerrain.png", 500, 1);
+	for (unsigned int i = 0; i < t->heightMap.size(); ++i) {
+		Game::logger << t->heightMap.at(i) << " ";
 	}
 
+	//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "You fucked up", "Here is the game", Game::window->sdl_window);
 
 	// PUT DEBUG WORLD INITIALIZATION CODE HERE
 	////**************************************************************************////
@@ -128,7 +120,7 @@ void World::init() {
 void World::run() {
 	initializeGameTime();
 
-	while (!done) { // TODO figure out what constitutes 'done'
+	while (!done) {
 		updateGameTime();
 
 		if (readyToTick()) {
@@ -142,17 +134,33 @@ void World::run() {
 
 
 void World::tick() {
+	//entities.sort(); // TODO write a operator< for entities involving their script execution order
+
 	processInput();
 	
 	// Move entities, integrate velocity
 	for (auto & e : entities) {
 		if (e->active) {
-			e->pretick();
+			e->integrate();
 		}
 	}
 
 	// Detect collisions
 	populateCollisionLists();
+
+	// Solve entity positions after collisions
+	for (auto & e : entities) {
+		if (e->active) {
+			e->handleCollisions();
+		}
+	}
+
+	// Any pre-tick logic (very rarely used)
+	for (auto & e : entities) {
+		if (e->active) {
+			e->pretick();
+		}
+	}
 
 	// Apply game logic, react to collisions
 	for (auto & e : entities) {
@@ -161,7 +169,7 @@ void World::tick() {
 		}
 	}
 
-	// Anything post frame that needs to be done
+	// Any post-tick logic (very rarely used)
 	for (auto & e : entities) {
 		if (e->active) {
 			e->posttick();
@@ -192,7 +200,6 @@ void World::tick() {
 
 		Game::logger << "\n";
 	}
-
 
 	//Game::renderer->camera.zoom += Game::input->getMovementAxes().yf() * 0.1;
 
@@ -225,15 +232,11 @@ void World::processInput() {
 void World::populateCollisionLists() {
 	// TODO this should be a quad tree fast collision detection algorithm
 	// TODO could create collision objects that each entity stores isntead of storing the entity
-	for (auto i = entities.begin(); i != entities.end(); ++i) {
-		(*i)->collisionList.clear();
-		for (auto j = entities.begin(); j != entities.end(); ++j) {
-			bool xcontains = ((*i)->pos.x() < (*j)->pos.x() && (*j)->pos.x() < (*i)->pos.x() + (*i)->size.x()) ||
-							 ((*j)->pos.x() < (*i)->pos.x() && (*i)->pos.x() < (*j)->pos.x() + (*j)->size.x());
-			bool ycontains = ((*i)->pos.y() < (*j)->pos.y() && (*j)->pos.y() < (*i)->pos.y() + (*i)->size.y()) ||
-							 ((*j)->pos.y() < (*i)->pos.y() && (*i)->pos.y() < (*j)->pos.y() + (*j)->size.y());
-			if (xcontains && ycontains) {
-				(*i)->collisionList.push_back(*j);
+	for (auto & i : entities) {
+		i->collisionList.clear();
+		for (auto & j : entities) {
+			if (i !=j && i->checkCollision(j)) {
+				i->collisionList.push_back(j); // TODO make collision objects instead
 			}
 		}
 	}
@@ -246,7 +249,6 @@ void World::initializeGameTime() {
 	timeOfLastTick = currentTime;
 	gameTicks = 0;
 	accumulator = 0.0;
-	double fps = 60.0;
 }
 
 
@@ -255,7 +257,7 @@ void World::updateGameTime() {
 	currentTime = (SDL_GetPerformanceCounter() * 1000.0 / SDL_GetPerformanceFrequency()) - startTime;
 	accumulator += (currentTime - lastTime);
 
-	// If we are 3 frames behind, reset _accumulator so we avoid the spiral of death'
+	// If we are 3 frames behind, reset _accumulator so we avoid the spiral of death
 	if (accumulator > (3 * desiredTickTime))
 		accumulator = 0.0;
 }

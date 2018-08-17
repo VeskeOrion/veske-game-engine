@@ -85,4 +85,6 @@ float random(float lower, float upper);
 float moveTo(float value, float desired, float step);
 float clamp(float value, float first, float second);
 
+bool withinEpsilon(float v1, float v2, float epsilon = 0.000001f);
+
 #endif // MATH_H

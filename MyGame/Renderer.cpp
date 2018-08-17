@@ -5,6 +5,8 @@
 #include "Logger.h"
 #include "Renderer.h"
 #include "Entity.h"
+#include "Terrain.h"
+
 
 
 Camera::Camera() {
@@ -73,6 +75,23 @@ void Camera::follow(std::weak_ptr<Entity> targ) {
 }
 
 
+Vector Camera::worldToCamera(Vector point) {
+	Vector res;
+	res.setX(std::round((point.x() - pos.xf()) * zoom));
+	res.setY(std::round((point.y() - pos.yf()) * zoom));
+	return res;
+}
+
+
+Vector Camera::screenToWorld(Vector point) {
+	//Vector res;
+	//res.x =
+	// TODO do
+	Vector v;
+	return v;
+}
+
+
 Renderer::Renderer() {
 
 }
@@ -126,8 +145,9 @@ void Renderer::render() {
 	// render entities
 	SDL_Rect src;
 	SDL_Rect dst;
-	for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
-		Entity & cur = **i;
+	//for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
+	for (auto i : Game::world->entities) {
+		Entity & cur = *i;
 
 		if (cur.visible && cur.active) {
 			// The src rectangle is the place in the spritesheet we want to render from
@@ -142,7 +162,27 @@ void Renderer::render() {
 			dst.w = (int) std::round(cur.sprite.w * camera.zoom);
 			dst.h = (int) std::round(cur.sprite.h * camera.zoom);
 
-			SDL_RenderCopy(sdl_renderer, (*i)->sprite.sdl_texture, &src, &dst);
+			// TODO should I hash every sprite to its surface and texture (which are stored in\
+			// a map in renderer perhaps) so Sprites dont have SDL code in them?
+			SDL_RenderCopy(sdl_renderer, cur.sprite.sdl_texture, &src, &dst);
+		}
+	}
+
+	// TODO delete this loop
+	for (auto i : Game::world->entities) {
+		SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+		if (std::shared_ptr<Terrain> t = std::dynamic_pointer_cast<Terrain>(i)) {
+			for (unsigned int i = 0; i < t->heightMap.size(); ++i) {
+				SDL_Rect rect;
+				Vector dest = t->pos;
+				dest.addX((float) i * t->resolution);
+				dest.addY((float) t->size.y() - t->heightMap.at(i));
+				rect.x = camera.worldToCamera(dest).x();
+				rect.y = camera.worldToCamera(dest).y();
+				rect.w = rect.h = (int) std::round(camera.zoom);
+			
+				SDL_RenderFillRect(sdl_renderer, &rect);
+			}
 		}
 	}
 

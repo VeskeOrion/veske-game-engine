@@ -19,64 +19,74 @@
 #include "Math.h"
 #include "Sprite.h"
 
+#include "Collision.h"
 
 class Entity {
 public:
 
-	enum CollisionType { KINEMATIC, STRONG, WEAK, TRIGGER, NONE };
-
 	Entity(); // TODO private constructors? Could that help?
 	virtual ~Entity();
-
-	std::weak_ptr<Entity> thisEntity; // a pointer to this entity in the World's entity lsit
-
-	std::list<std::shared_ptr<Entity>> collisionList;
 
 	static unsigned int entityIDCounter;
 	unsigned int entityID;
 
+	// a pointer to this entity in the World's entity list, never set this manually
+	std::weak_ptr<Entity> thisEntity;
+
+	CollisionType collisionType;
+	std::list<std::shared_ptr<Entity>> collisionList; // TODO make this a list of collisions
+	std::list<std::shared_ptr<Collision>> collisionsListed;
+
 	std::string name;
 
-	Vector pos; // Position (top left), affected by vel, and can be set
-	Vector vel; // Velocity, affects pos, affected by acc, and can be set
-	Vector acc; // Acceleration, can be set
-	Vector drag; // Decceleration, affects vel, can be set
-
-	bool useGravity;
+	Vector pos; // Position (top left), affected by vel, can be set
+	Vector vel; // Velocity, affects pos, affected by acc, can be set
+	Vector acc; // Acceleration, affects vel, can be set
+	Vector drag; // Decceleration, affects vel, always on, can be set
 
 	Vector size; // AABB size
 
+	bool active;
+	bool useGravity;
+
 	Sprite sprite;
-	//std::shared_ptr<Sprite> sprite;
 	int zIndex;
 	bool visible;
 	float alpha;
+	// TODO float scrollFactor;
 
-	bool active;
-
-	// TODO give Entity an Init function (like Unity's Start) called when world inits after lvel load, GENIUS!
+	// TODO give Entity an Start? function (like Unity's Start) called when world inits after lvel load, GENIUS!
 
 	// TODO worry about parenting and children
 	//std::weak_ptr<Entity> parent;
 	//std::list<std::weak_ptr<Entity>> children;
 
-	// Pretick is for collisions, animations updates, and "enginey" stuff
+	// integrate
+	// handle collisions
+	// update
+
+	void init();
+
+	// Integrate() is for moving the entity
+	virtual void integrate();
+
+	// HandleCollisions() is for solving entity positions after movement
+	virtual void handleCollisions();
+
+	// Pretick() is for game logic and has little use as of now
 	virtual void pretick();
 
-	// Tick is where game logic is updated and physics are reacted to, and where
-	// animations are assigned. Always call Entity::tick() as the first thing you
-	// do when overriding this function.
+	// Tick() is where game logic is updated and collisions are reacted to logically
 	virtual void tick();
 
-	// Posttick has little use as of now.
+	// Posttick() is for game logic and has little use as of now
 	virtual void posttick();
 
 	// Destroys this entity once the frame has ended
-	virtual void kill();
+	virtual void destroy();
 
-	// TODO remove these, make Rectangle fulfil these reponsibilities? Or nah?
-	//bool intersects(Entity & e);
-	//Vector intersectsAt(Entity & e);
+	// Returns if the two entities are intersecting
+	virtual bool checkCollision(std::shared_ptr<Entity> e);
 };
 
 

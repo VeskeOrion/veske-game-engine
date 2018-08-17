@@ -1,8 +1,11 @@
-#include "Math.h"
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <random>
+
+
+#include "Math.h"
+
 
 Vector::Vector() {
 	reset();
@@ -290,4 +293,10 @@ float clamp(float value, float first, float second) {
 		value = first;
 	}
 	return value;
+}
+
+
+bool withinEpsilon(float v1, float v2, float epsilon) {
+	return (std::abs(v1) <= std::abs(v2) && std::abs(v1) + epsilon >= std::abs(v2)) ||
+		   (std::abs(v2) <= std::abs(v1) && std::abs(v2) + epsilon >= std::abs(v1));
 }
