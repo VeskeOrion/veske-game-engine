@@ -1,0 +1,26 @@
+# Source file stuff
+GAME := game
+GAME_SRC := $(wildcard src/*.cpp)
+GAME_HED := $(wildcard src/*.h)
+GAME_OBJ := $(patsubst src/%.cpp,%.o,$(GAME_SRC))
+
+# Compiler stuff
+CC := g++
+LDFLAGS := 
+CFLAGS := -c -std=c++11
+LLIBS := ~/devlibs/SDL2/lib/libSDL2.dylib ~/devlibs/SDL2_image/lib/libSDL2_image.dylib
+
+# Compiling and linking
+%.o: src/%.cpp src/%.h
+	$(CC) $(CFLAGS) $<
+
+all: $(GAME)
+
+$(GAME): $(GAME_OBJ)
+	$(CC) $(GAME_OBJ) $(LLIBS) $(LDFLAGS)
+
+# Cleaning
+.PHONY: clean
+
+clean:
+	rm -f *.o *.out log.txt

@@ -18,7 +18,7 @@ private:
 public:
 	Vector();
 	Vector(float x, float y);
-	Vector(Vector & v);
+	Vector(const Vector & v);
 	~Vector();
 
 	int x();
@@ -46,7 +46,7 @@ public:
 	Vector operator/(int s);
 	Vector operator/(float s);
 	Vector scale(Vector v);
-	Vector & operator=(Vector & v);
+	Vector & operator=(const Vector & v);
 };
 
 
@@ -79,8 +79,8 @@ public:
 	Vector center();
 };
 
-float random();
-float random(float lower, float upper);
+float randomNum();
+float randomNum(float lower, float upper);
 
 float moveTo(float value, float desired, float step);
 float clamp(float value, float first, float second);

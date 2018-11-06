@@ -56,7 +56,7 @@ std::shared_ptr<Entity> World::findEntity(const std::string & name) {
 
 
 void World::init() {
-done = false;
+	done = false;
 
 	//setLevel();
 	//loadLevel();
@@ -68,40 +68,40 @@ done = false;
 
 	// TODO remove this hardcoded adding player, should be done from a Level object
 
-	for (int i = 0; i < 20; ++i) {
-		std::shared_ptr<Entity> k(new Entity());
-		Game::world->addEntity(k);
-		k->useGravity = false;
+	// for (int i = 0; i < 20; ++i) {
+	// 	std::shared_ptr<Entity> k(new Entity());
+	// 	Game::world->addEntity(k);
+	// 	k->useGravity = false;
 
-		if (random() > 0.95f) {
-			k->pos.addX(100);
-			k->sprite.loadFromFile("media/colorful.png", 64, 64);
-			k->size.set(64, 64);
-			if (random() > 0.5f)
-				k->sprite.addAnim("fun", 0, true, { 0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0 });
-			else
-				k->sprite.addAnim("fun", 0, true, { 0,1,1,2,2,2,2,2,3,3,2,2,2,3,2,1,0,0,1,1 });
-			k->sprite.setAnim("fun");
-		}
-		else if (random() > 0.5f) {
-			k->sprite.loadFromFile("media/Wheel.png", 8, 8);
-			k->size.set(8, 8);
-		}
-		else {
-			k->sprite.loadFromFile("media/Character.png", 48, 48);
-			k->size.set(48, 48);
-		}
+	// 	if (randomNum() > 0.95f) {
+	// 		k->pos.addX(100);
+	// 		k->sprite.loadFromFile("media/colorful.png", 64, 64);
+	// 		k->size.set(64, 64);
+	// 		if (randomNum() > 0.5f)
+	// 			k->sprite.addAnim("fun", 0, true, { 0,1,2,3,4,5,6,7,7,6,5,4,3,2,1,0 });
+	// 		else
+	// 			k->sprite.addAnim("fun", 0, true, { 0,1,1,2,2,2,2,2,3,3,2,2,2,3,2,1,0,0,1,1 });
+	// 		k->sprite.setAnim("fun");
+	// 	}
+	// 	else if (randomNum() > 0.5f) {
+	// 		k->sprite.loadFromFile("media/Wheel.png", 8, 8);
+	// 		k->size.set(8, 8);
+	// 	}
+	// 	else {
+	// 		k->sprite.loadFromFile("media/Character.png", 48, 48);
+	// 		k->size.set(48, 48);
+	// 	}
 
-		k->pos.set(random(-200.0f, 200.0f), random(-200.0f, 200.0f));
-	}
-	//Game::world->removeEntity(p.get());
+	// 	k->pos.set(randomNum(-200.0f, 200.0f), randomNum(-200.0f, 200.0f));
+	// }
+	// //Game::world->removeEntity(p.get());
 
-	std::shared_ptr<Player> p(new Player());
-	Game::world->addEntity(p);
-	p->name = "Player";
-	p->drag.set(1.0f, 1.0f);
-	p->sprite.loadFromFile("media/Colorful.png", 64, 64);
-	p->size.set(64, 64);
+	// std::shared_ptr<Player> p(new Player());
+	// Game::world->addEntity(p);
+	// p->name = "Player";
+	// p->drag.set(1.0f, 1.0f);
+	// p->sprite.loadFromFile("media/Colorful.png", 64, 64);
+	// p->size.set(64, 64);
 
 	// std::shared_ptr<Terrain> t(new Terrain());
 	// Game::world->addEntity(t);
@@ -216,7 +216,7 @@ void World::tick() {
 	//
 	//if (entities.size() > 0)
 	//	entities.back()->kill();
-	//Game::logger << random() << "\n";
+	//Game::logger << randomNum() << "\n";
 
 	//Game::logger << e->sprite.currentAnim.elapsed;
 

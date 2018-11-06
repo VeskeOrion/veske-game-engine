@@ -1,14 +1,23 @@
-Debug
-Release
-.vs
-MyGame/Debug
-MyGame/Release
+# Project folders
+./media
+./lib
+
+# Junk files
+.DS_store
+test.cpp
 
 # Log files
 *.txt
 
 # Library binaries
 *.dll
+*.obj
+*.o
+*.exe
+*.exp
+*.lib
+*.ilk
+*.pdb
 
 # Visual Studio project files
 *.vcxproj

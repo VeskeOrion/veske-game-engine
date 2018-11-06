@@ -40,11 +40,11 @@ void Terrain::generateRandomSmoothTerrain(unsigned int len, unsigned int res) {
 		heightMap.push_back(currentHeight);
 
 
-		if (random() < 1.0f / (10.0f + smoothener)) {
+		if (randomNum() < 1.0f / (10.0f + smoothener)) {
 			++currentHeight;
 			smoothener += 10.0f;
 		}
-		if (random() < 1.0f / (10.0f + smoothener) && currentHeight > 1) {
+		if (randomNum() < 1.0f / (10.0f + smoothener) && currentHeight > 1) {
 			--currentHeight;
 			smoothener += 10.0f;
 		}

@@ -1,5 +1,6 @@
 #include "Input.h"
 #include "Game.h"
+#include <cmath>
 
 
 Input::Input() {
@@ -156,6 +157,8 @@ void Input::processInput() {
 			case SDL_CONTROLLERBUTTONUP: {
 				handleControllerButton(e, KEY_UP);
 			} break;
+
+			default:;
 
 			// TODO add a case for controller connecting/disconnecting
 		}
@@ -330,6 +333,9 @@ void Input::handleControllerAxisMotion(SDL_Event & e) {
 		case USA_RTRIGGER: {
 			splitAxes[0] = CA_RTRIGGER;
 		} break;
+
+		default:;
+
 	}
 
 	// If 0 is received from controller, send action with magnitude of 0 to both actions associate with the axis

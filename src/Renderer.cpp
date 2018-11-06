@@ -1,4 +1,4 @@
-#include <SDL/SDL_image.h>
+#include <SDL_image/SDL_image.h>
 //#include <SDL/SDL_ttf.h>
 
 #include "Game.h"
@@ -6,6 +6,8 @@
 #include "Renderer.h"
 #include "Entity.h"
 #include "Terrain.h"
+
+#include <cmath>
 
 
 
