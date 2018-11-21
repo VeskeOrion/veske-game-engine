@@ -13,14 +13,13 @@
 
 #include <string>
 #include <iostream>
-#include <iomanip>
+//#include <iomanip>
 #include <fstream>
 #include <memory>
-#include <chrono>
-#include <ctime>
+//#include <chrono>
+//#include <ctime>
 
 
-// TODO should I make this multithreaded so it can write to files without delaying game?
 class Logger {
 public:
 	Logger();

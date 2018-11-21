@@ -6,12 +6,13 @@
 #include <vector>
 #include <list>
 
+#include "Entity.h"
 
-class Entity;
+// class Entity;
 
 
-// Enum with varying stengths about how entities react to collisions in game
-enum CollisionType { KINEMATIC, STRONG, WEAK, TRIGGER, NONE };
+// // Enum with varying stengths about how entities react to collisions in game
+// enum CollisionType { KINEMATIC, STRONG, WEAK, TRIGGER, NONE };
 
 
 class Collision {

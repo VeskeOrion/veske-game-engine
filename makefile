@@ -12,7 +12,7 @@ CFLAGS := -c -EHsc -nologo
 LLIBS := SDL2main.lib SDL2.lib SDL2_image.lib
 
 # Compiling and linking
-%.obj: src/%.cpp src/%.h
+%.obj: src/%.cpp src/*.h
 	$(CC) $(CFLAGS) $<
 
 all: $(GAME)

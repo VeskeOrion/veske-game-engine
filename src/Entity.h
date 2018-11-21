@@ -19,7 +19,7 @@
 #include "Math.h"
 #include "Sprite.h"
 
-#include "Collision.h"
+//#include "Collision.h"
 
 class Entity {
 public:
@@ -33,9 +33,9 @@ public:
 	// a pointer to this entity in the World's entity list, never set this manually
 	std::weak_ptr<Entity> thisEntity;
 
-	CollisionType collisionType;
-	std::list<std::shared_ptr<Entity>> collisionList; // TODO make this a list of collisions
-	std::list<std::shared_ptr<Collision>> collisionsListed;
+	// CollisionType collisionType;
+	// std::list<std::shared_ptr<Entity>> collisionList; // TODO make this a list of collisions
+	// std::list<std::shared_ptr<Collision>> collisionsListed;
 
 	std::string name;
 
@@ -49,7 +49,7 @@ public:
 	bool active;
 	bool useGravity;
 
-	Sprite sprite;
+	//Sprite sprite;
 	int zIndex;
 	bool visible;
 	float alpha;

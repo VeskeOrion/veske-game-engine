@@ -15,7 +15,7 @@ Input::~Input() {
 
 bool Input::init() {
 	// TODO delete this?
-	SDL_ShowCursor(SDL_DISABLE);
+	//SDL_ShowCursor(SDL_DISABLE);
 
 	// TODO this only gets one controller
 	// TODO this should be done whenever needed if controllers are replugged etc
@@ -25,6 +25,8 @@ bool Input::init() {
 			SDL_GameControllerEventState(SDL_ENABLE);
 		}
 	}
+
+	// TODO set all inputs to false
 
 	return true;
 }

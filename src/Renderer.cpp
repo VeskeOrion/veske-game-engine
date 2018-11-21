@@ -102,8 +102,10 @@ Renderer::~Renderer() {
 
 	IMG_Quit();
 
-	SDL_DestroyRenderer(sdl_renderer);
-	sdl_renderer = nullptr;
+	if (sdl_renderer != nullptr) {
+		SDL_DestroyRenderer(sdl_renderer);
+		sdl_renderer = nullptr;
+	}
 }
 
 
@@ -130,7 +132,7 @@ bool Renderer::init() {
 
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 
-	camera.init();
+	camera.init(); // TODO really? why is camera here?
 
 	return true;
 }
@@ -145,46 +147,59 @@ void Renderer::render() {
 	// render entities
 	SDL_Rect src;
 	SDL_Rect dst;
-	//for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
+	// for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
 	for (auto i : Game::world->entities) {
 		Entity & cur = *i;
 
-		if (cur.visible && cur.active) {
-			// The src rectangle is the place in the spritesheet we want to render from
-			src.x = cur.sprite.w * cur.sprite.currentAnim.currentFrame();
-			src.y = cur.sprite.h * cur.sprite.currentAnim.yoff;
-			src.w = cur.sprite.w;
-			src.h = cur.sprite.h;
-
-			// The dest rectangle is the place on the screen we want to render to
-			dst.x = (int) std::round((cur.pos.x() + cur.sprite.offx - camera.pos.xf()) * camera.zoom);
-			dst.y = (int) std::round((cur.pos.y() + cur.sprite.offy - camera.pos.yf()) * camera.zoom);
-			dst.w = (int) std::round(cur.sprite.w * camera.zoom);
-			dst.h = (int) std::round(cur.sprite.h * camera.zoom);
-
-			// TODO should I hash every sprite to its surface and texture (which are stored in\
-			// a map in renderer perhaps) so Sprites dont have SDL code in them?
-			SDL_RenderCopy(sdl_renderer, cur.sprite.sdl_texture, &src, &dst);
-		}
-	}
-
-	// TODO delete this loop
-	for (auto i : Game::world->entities) {
+		dst.x = (int) std::round((cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+		dst.y = (int) std::round((cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+		dst.w = (int) std::round(/*cur.sprite.w */ cur.size.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+		dst.h = (int) std::round(/* cur.sprite.h */ cur.size.y() * camera.zoom);
 		SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		if (std::shared_ptr<Terrain> t = std::dynamic_pointer_cast<Terrain>(i)) {
-			for (unsigned int i = 0; i < t->heightMap.size(); ++i) {
-				SDL_Rect rect;
-				Vector dest = t->pos;
-				dest.addX((float) i * t->resolution);
-				dest.addY((float) t->size.y() - t->heightMap.at(i));
-				rect.x = camera.worldToCamera(dest).x();
-				rect.y = camera.worldToCamera(dest).y();
-				rect.w = rect.h = (int) std::round(camera.zoom);
-			
-				SDL_RenderFillRect(sdl_renderer, &rect);
-			}
-		}
+		SDL_RenderDrawRect(sdl_renderer, &dst);
+
+		dst.x = (cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom;
+		dst.y = (cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom;
+		dst.w = /*cur.sprite.w */ cur.size.x() * camera.zoom;
+		dst.h = /* cur.sprite.h */ cur.size.y() * camera.zoom;
+		SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawRect(sdl_renderer, &dst);
+		// if (cur.visible && cur.active && cur.sprite.texture) {
+		// 	// The src rectangle is the place in the spritesheet we want to render from
+		// 	src.x = 0; // cur.sprite.w * cur.sprite.currentAnim.currentFrame(); // TODO readd anims on sprites
+		// 	src.y = 0; // cur.sprite.h * cur.sprite.currentAnim.yoff;
+		// 	src.w = cur.sprite.w;
+		// 	src.h = cur.sprite.h;
+
+		// 	// The dest rectangle is the place on the screen we want to render to
+		// 	dst.x = (int) std::round((cur.pos.x() + cur.sprite.offx - camera.pos.xf()) * camera.zoom);
+		// 	dst.y = (int) std::round((cur.pos.y() + cur.sprite.offy - camera.pos.yf()) * camera.zoom);
+		// 	dst.w = (int) std::round(cur.sprite.w * camera.zoom);
+		// 	dst.h = (int) std::round(cur.sprite.h * camera.zoom);
+
+		// 	// TODO should I hash every sprite to its surface and texture (which are stored in
+		// 	// a map in renderer perhaps) so Sprites dont have SDL code in them?
+		// 	SDL_RenderCopy(sdl_renderer, cur.sprite.texture->sdl_texture, &src, &dst);
+		// }
 	}
+
+	// // TODO delete this loop
+	// for (auto i : Game::world->entities) {
+	// 	SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	// 	if (std::shared_ptr<Terrain> t = std::dynamic_pointer_cast<Terrain>(i)) {
+	// 		for (unsigned int i = 0; i < t->heightMap.size(); ++i) {
+	// 			SDL_Rect rect;
+	// 			Vector dest = t->pos;
+	// 			dest.addX((float) i * t->resolution);
+	// 			dest.addY((float) t->size.y() - t->heightMap.at(i));
+	// 			rect.x = camera.worldToCamera(dest).x();
+	// 			rect.y = camera.worldToCamera(dest).y();
+	// 			rect.w = rect.h = (int) std::round(camera.zoom);
+			
+	// 			SDL_RenderFillRect(sdl_renderer, &rect);
+	// 		}
+	// 	}
+	// }
 
 	// TODO render ui
 	// TODO make UI

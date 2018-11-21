@@ -18,6 +18,7 @@
 
 #include "Game.h"
 #include "Entity.h"
+#include "Texture.h"
 
 
 class Camera {
@@ -34,7 +35,7 @@ public:
 	std::weak_ptr<Entity> target;
 	Vector followOffset;
 
-	void init();
+	void init(); // TODO destroy function? On all game systems?
 	void update();
 
 	void follow(std::weak_ptr<Entity> targ);
@@ -52,6 +53,7 @@ public:
 	~Renderer();
 
 	Camera camera;
+	std::list<std::shared_ptr<Texture>> textures;
 
 	//std::list<std::shared_ptr<Sprite>> sprites;
 

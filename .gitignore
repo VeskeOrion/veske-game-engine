@@ -1,23 +1,15 @@
-Debug
-Release
-.vs
-MyGame/Debug
-MyGame/Release
+# Development folders
+lib
+media
 
-# Log files
-*.txt
-
-# Library binaries
+# Scrap files
+*.exe
+*.obj
 *.dll
-
-# Visual Studio project files
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
-*.db
-*.sdf
-*.sln
-*.opendb
-
-# Images
-*.png
+*.lib
+*.exp
+*.ilk
+*.pdb
+.vscode
+log.txt
+test.cpp

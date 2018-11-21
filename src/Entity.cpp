@@ -60,44 +60,44 @@ void Entity::integrate() {
 
 
 void Entity::handleCollisions() {
-	for (auto i : collisionList) {
+	// for (auto i : collisionList) {
 
-		// Collision with terrain
-		if (std::shared_ptr<Terrain> t = std::dynamic_pointer_cast<Terrain>(i)) {
-			////int entityMidpoint = (pos.x() + size.x()) / 2;
-			//int xCoordThatRestsUponTerrain = pos.x() + size.x();
-			//int heightmapIndex = (xCoordThatRestsUponTerrain - t->pos.x()) / t->resolution;
-			//if (0 <= heightmapIndex && heightmapIndex < t->heightMap.size()) {
-			//	int height = t->heightMap[heightmapIndex];
-			//	pos.setY(t->pos.y() + t->size.y() - height - size.y());
-			//}
-		}
+	// 	// Collision with terrain
+	// 	if (std::shared_ptr<Terrain> t = std::dynamic_pointer_cast<Terrain>(i)) {
+	// 		////int entityMidpoint = (pos.x() + size.x()) / 2;
+	// 		//int xCoordThatRestsUponTerrain = pos.x() + size.x();
+	// 		//int heightmapIndex = (xCoordThatRestsUponTerrain - t->pos.x()) / t->resolution;
+	// 		//if (0 <= heightmapIndex && heightmapIndex < t->heightMap.size()) {
+	// 		//	int height = t->heightMap[heightmapIndex];
+	// 		//	pos.setY(t->pos.y() + t->size.y() - height - size.y());
+	// 		//}
+	// 	}
 
-		// Collision with regular entity
-		else {
-			switch (collisionType) {
-				case KINEMATIC: {
-					// do nothing
-				} break;
+	// 	// Collision with regular entity
+	// 	else {
+	// 		switch (collisionType) {
+	// 			case KINEMATIC: {
+	// 				// do nothing
+	// 			} break;
 
-				case STRONG: {
+	// 			case STRONG: {
 					
-				} break;
+	// 			} break;
 
-				case WEAK: {
+	// 			case WEAK: {
 
-				} break;
+	// 			} break;
 
-				case TRIGGER: {
+	// 			case TRIGGER: {
 
-				} break;
+	// 			} break;
 
-				case NONE: {
+	// 			case NONE: {
 
-				} break;
-			}
-		}
-	}
+	// 			} break;
+	// 		}
+	// 	}
+	// }
 }
 
 
@@ -108,7 +108,7 @@ void Entity::pretick() {
 
 void Entity::tick() {
 	// Update animation frame // TODO should this be at the end of tick?
-	sprite.currentAnim.update();
+	//sprite.currentAnim.update();
 	//pos = Game::input->getMousePos() / (int)Game::renderer->scaleFactor;
 }
 
