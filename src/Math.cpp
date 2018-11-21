@@ -17,7 +17,7 @@ Vector::Vector(float x, float y) {
 }
 
 
-Vector::Vector(Vector & v) {
+Vector::Vector(const Vector & v) {
 	set(v.mX, v.mY);
 }
 
@@ -145,7 +145,7 @@ Vector Vector::scale(Vector v) {
 }
 
 
-Vector & Vector::operator=(Vector & v) {
+Vector & Vector::operator=(const Vector & v) {
 	set(v.mX, v.mY);
 	return *this;
 }
@@ -255,13 +255,13 @@ Vector Rectangle::center() {
 }
 
 
-float random() {
-	static std::mt19937 generator((unsigned int) time((time_t) 0));
+float randomNum() {
+	static std::mt19937 generator((unsigned int) time(NULL));
 	return (float) generator() / (float) generator.max();
 }
 
 
-float random(float lower, float upper) {
+float randomNum(float lower, float upper) {
 	return lower + random() * (upper - lower);
 }
 

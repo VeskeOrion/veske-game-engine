@@ -1,6 +1,10 @@
-# Development folders
-lib
-media
+# Project folders
+./media
+./lib
+
+# Junk files
+.DS_store
+test.cpp
 
 # Scrap files
 *.exe
@@ -13,3 +17,22 @@ media
 .vscode
 log.txt
 test.cpp
+*.obj
+*.o
+*.exe
+*.exp
+*.lib
+*.ilk
+*.pdb
+
+# Visual Studio project files
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.db
+*.sdf
+*.sln
+*.opendb
+
+# Images
+*.png

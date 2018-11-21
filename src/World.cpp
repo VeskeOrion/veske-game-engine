@@ -227,7 +227,7 @@ void World::tick() {
 	//
 	//if (entities.size() > 0)
 	//	entities.back()->kill();
-	//Game::logger << random() << "\n";
+	//Game::logger << randomNum() << "\n";
 
 	//Game::logger << e->sprite.currentAnim.elapsed;
 
