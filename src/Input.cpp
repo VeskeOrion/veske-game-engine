@@ -27,7 +27,19 @@ bool Input::init() {
 		}
 	}
 
-	// TODO set all inputs to false
+
+	auto clearPackets = [](InputPacket packets[], int len){
+		for (int i = 0; i < len; ++i) {
+			packets[i].occurring = false;
+			packets[i].duration = 0;
+			packets[i].magnitude = 0.0f;
+		}
+	};
+
+	clearPackets(mouseButtonPresses, NUM_MOUSEBUTTONS);
+	clearPackets(keyPresses, NUM_KEYBOARDKEYS);
+	clearPackets(controllerButtonPresses, NUM_CONTROLLERBUTTONS);
+	clearPackets(controllerAxisMovement, NUM_CONTROLLERAXES);
 
 	return true;
 }

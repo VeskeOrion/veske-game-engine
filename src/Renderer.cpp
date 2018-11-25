@@ -47,7 +47,9 @@ void Camera::update() {
 		// TODO make camera following smooth
 		//Vector toDestination = targetLock->pos + followOffset + (targetLock->size - windowSize) / 2;
 		//pos = pos + (toDestination - pos) * 0.001f;
-		pos = targetLock->pos + followOffset + (targetLock->size - windowSize) / 2;
+		
+		// TODO readd camera following
+		//pos = targetLock->pos + followOffset + (targetLock->size - windowSize) / 2;
 
 	}
 	else {
@@ -132,6 +134,7 @@ bool Renderer::init() {
 	// 	return false;
 	// }
 
+	SDL_GL_SetSwapInterval(1); // Enable vsync
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "0");
 
 	camera.init(); // TODO really? why is camera here?
@@ -146,6 +149,27 @@ void Renderer::render() {
 	SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(sdl_renderer);
 
+	// // render entities
+	// SDL_Rect src;
+	// SDL_Rect dst;
+	// Vector size;
+	// Vector pos;
+	// // for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
+	// for (auto i : Game::world->entities) {
+	// 	Entity & cur = *i;
+
+	// 	pos.setX(std::round(cur.pos.xf() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+	// 	pos.setY(std::round(cur.pos.yf() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+	// 	size.setX(/*cur.sprite.w */ std::round(cur.size.xf()) * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+	// 	size.setY(/* cur.sprite.h */ std::round(cur.size.yf()) * camera.zoom);
+		
+	// 	dst.x = pos.x();
+	// 	dst.y = pos.y();
+	// 	dst.w = size.x();
+	// 	dst.h = size.y();
+
+	// 	SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	// 	SDL_RenderFillRect(sdl_renderer, &dst);
 	// render entities
 	SDL_Rect src;
 	SDL_Rect dst;
@@ -153,19 +177,20 @@ void Renderer::render() {
 	for (auto i : Game::world->entities) {
 		Entity & cur = *i;
 
-		dst.x = (int) std::round((cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
-		dst.y = (int) std::round((cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
-		dst.w = (int) std::round(/*cur.sprite.w */ cur.size.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
-		dst.h = (int) std::round(/* cur.sprite.h */ cur.size.y() * camera.zoom);
-		SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawRect(sdl_renderer, &dst);
+		// dst.x = (int) std::round((cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+		// dst.y = (int) std::round((cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+		// dst.w = (int) std::round(/*cur.sprite.w */ cur.size.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+		// dst.h = (int) std::round(/* cur.sprite.h */ cur.size.y() * camera.zoom);
+		// SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+		// SDL_RenderDrawRect(sdl_renderer, &dst);
 
-		dst.x = (cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom;
-		dst.y = (cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom;
-		dst.w = /*cur.sprite.w */ cur.size.x() * camera.zoom;
-		dst.h = /* cur.sprite.h */ cur.size.y() * camera.zoom;
-		SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawRect(sdl_renderer, &dst);
+		// dst.x = (cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom;
+		// dst.y = (cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom;
+		// dst.w = /*cur.sprite.w */ cur.size.x() * camera.zoom;
+		// dst.h = /* cur.sprite.h */ cur.size.y() * camera.zoom;
+		// SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
+		// SDL_RenderDrawRect(sdl_renderer, &dst);
+
 		// if (cur.visible && cur.active && cur.sprite.texture) {
 		// 	// The src rectangle is the place in the spritesheet we want to render from
 		// 	src.x = 0; // cur.sprite.w * cur.sprite.currentAnim.currentFrame(); // TODO readd anims on sprites

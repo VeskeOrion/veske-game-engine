@@ -11,7 +11,7 @@ CFLAGS := -c -std=c++11
 LLIBS := ~/devlibs/SDL2/lib/libSDL2.dylib ~/devlibs/SDL2_image/lib/libSDL2_image.dylib
 
 # Compiling and linking
-%.o: src/%.cpp src/%.h
+%.o: src/%.cpp */%.h
 	$(CC) $(CFLAGS) $<
 
 all: $(GAME)

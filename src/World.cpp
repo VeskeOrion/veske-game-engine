@@ -2,9 +2,10 @@
 #include "Game.h"
 
 #include "Entity.h" // TODO remove this, this is for debug testing by spawning players
-#include "Player.h" // TODO remove this, this is for debug testing by spawning players
 #include "Terrain.h" // TODO remove this, this is for debug testing by spawning players
 #include "Collision.h"
+#include "Component.h" // TODO remove this, this is for debug testing by spawning players
+#include "Body.h" // TODO remove this, this is for debug testing by spawning players
 
 
 World::World() {
@@ -68,16 +69,20 @@ void World::init() {
 
 	// TODO remove this hardcoded adding player, should be done from a Level object
 	Game::logger << "Starting to init world\n";
-	std::shared_ptr<Entity> k(new Entity());
-	k->size.set(32, 32);
+	std::shared_ptr<Entity> ent = std::make_shared<Entity>();
+	std::shared_ptr<Body> com = std::make_shared<Body>();
+	ent->addComponent(com);
 
-	Game::world->addEntity(k);
+	Game::logger << ent->components.size();
+	// k->size.set(32, 32);
 
-	std::shared_ptr<Player> p(new Player());
-	Game::world->addEntity(p);
-	p->name = "Player";
-	p->drag.set(1.0f, 1.0f);
-	p->size.set(64, 64);
+	Game::world->addEntity(ent);
+
+	// std::shared_ptr<Player> p(new Player());
+	// Game::world->addEntity(p);
+	// p->name = "Player";
+	// p->drag.set(1.0f, 1.0f);
+	// p->size.set(64, 64);
 
 	// for (int i = 0; i < 20; ++i) {
 		// std::shared_ptr<Entity> k(new Entity());
@@ -141,12 +146,12 @@ void World::run() {
 			tick();
 
 			incrementTickCounter();
-			Game::logger << "Ticked\n";
+			//Game::logger << "Ticked\n";
 		}
 		render();
-		Game::logger << "Rendered\n";
+		//Game::logger << "Rendered\n";
 	}
-	Game::logger << "Done\n";
+	//Game::logger << "Done\n";
 }
 
 
@@ -154,30 +159,16 @@ void World::tick() {
 	//entities.sort(); // TODO write a operator< for entities involving their script execution order
 
 	processInput();
-	
-	// Move entities, integrate velocity
-	for (auto & e : entities) {
-		if (e->active) {
-			e->integrate();
-		}
-	}
 
-	// Detect collisions
-	populateCollisionLists();
-
-	// Solve entity positions after collisions
-	for (auto & e : entities) {
-		if (e->active) {
-			e->handleCollisions();
-		}
-	}
-
-	// Any pre-tick logic (very rarely used)
+	// Any pre-tick logic
 	for (auto & e : entities) {
 		if (e->active) {
 			e->pretick();
 		}
 	}
+
+	// Detect collisions
+	populateCollisionLists();
 
 	// Apply game logic, react to collisions
 	for (auto & e : entities) {
@@ -186,7 +177,7 @@ void World::tick() {
 		}
 	}
 
-	// Any post-tick logic (very rarely used)
+	// Any post-tick logic
 	for (auto & e : entities) {
 		if (e->active) {
 			e->posttick();
@@ -247,6 +238,8 @@ void World::processInput() {
 
 
 void World::populateCollisionLists() {
+
+
 	// TODO this should be a quad tree fast collision detection algorithm
 	// TODO could create collision objects that each entity stores isntead of storing the entity
 	// for (auto & i : entities) {

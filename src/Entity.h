@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "Math.h"
+#include "Component.h"
 #include "Sprite.h"
 
 //#include "Collision.h"
@@ -33,26 +34,20 @@ public:
 	// a pointer to this entity in the World's entity list, never set this manually
 	std::weak_ptr<Entity> thisEntity;
 
-	// CollisionType collisionType;
-	// std::list<std::shared_ptr<Entity>> collisionList; // TODO make this a list of collisions
-	// std::list<std::shared_ptr<Collision>> collisionsListed;
+	std::vector<std::shared_ptr<Component>> components;
 
 	std::string name;
-
-	Vector pos; // Position (top left), affected by vel, can be set
-	Vector vel; // Velocity, affects pos, affected by acc, can be set
-	Vector acc; // Acceleration, affects vel, can be set
-	Vector drag; // Decceleration, affects vel, always on, can be set
-
-	Vector size; // AABB size
+	Vector pos;
 
 	bool active;
-	bool useGravity;
 
-	//Sprite sprite;
-	int zIndex;
-	bool visible;
-	float alpha;
+
+	// bool useGravity;
+
+	// //Sprite sprite;
+	// int zIndex;
+	// bool visible;
+	// float alpha;
 	// TODO float scrollFactor;
 
 	// TODO give Entity an Start? function (like Unity's Start) called when world inits after lvel load, GENIUS!
@@ -65,28 +60,25 @@ public:
 	// handle collisions
 	// update
 
-	void init();
 
-	// Integrate() is for moving the entity
-	virtual void integrate();
-
-	// HandleCollisions() is for solving entity positions after movement
-	virtual void handleCollisions();
-
-	// Pretick() is for game logic and has little use as of now
+	virtual void init();
 	virtual void pretick();
-
-	// Tick() is where game logic is updated and collisions are reacted to logically
 	virtual void tick();
-
-	// Posttick() is for game logic and has little use as of now
 	virtual void posttick();
-
-	// Destroys this entity once the frame has ended
 	virtual void destroy();
 
-	// Returns if the two entities are intersecting
-	virtual bool checkCollision(std::shared_ptr<Entity> e);
+	template <typename T>
+	std::shared_ptr<T> getComponent() {
+		for (unsigned int i = 0; i < components.size(); ++i)
+			if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(components[i]))
+				return t;
+		return nullptr;
+	}
+
+	template <typename T>
+	void addComponent(std::shared_ptr<T> component) {
+		components.push_back(component);
+	}
 };
 
 

@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 
-#include <SDL/SDL_image.h>
+#include <SDL_image/SDL_image.h>
 #include <SDL/SDL.h>
 
 

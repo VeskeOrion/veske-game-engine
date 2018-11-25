@@ -24,6 +24,8 @@ test.cpp
 *.lib
 *.ilk
 *.pdb
+a.out
+makefile
 
 # Visual Studio project files
 *.vcxproj
