@@ -262,7 +262,7 @@ float randomNum() {
 
 
 float randomNum(float lower, float upper) {
-	return lower + random() * (upper - lower);
+	return lower + randomNum() * (upper - lower);
 }
 
 

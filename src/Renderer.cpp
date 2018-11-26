@@ -1,10 +1,12 @@
-#include <SDL_image/SDL_image.h>
-//#include <SDL/SDL_ttf.h>
+#include <SDL_image.h>
+//#include <SDL_ttf.h>
 
 #include "Game.h"
 #include "Logger.h"
 #include "Renderer.h"
 #include "Entity.h"
+#include "Component.h"
+#include "Body.h"
 #include "Terrain.h"
 
 #include <cmath>
@@ -177,12 +179,17 @@ void Renderer::render() {
 	for (auto i : Game::world->entities) {
 		Entity & cur = *i;
 
-		// dst.x = (int) std::round((cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
-		// dst.y = (int) std::round((cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
-		// dst.w = (int) std::round(/*cur.sprite.w */ cur.size.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
-		// dst.h = (int) std::round(/* cur.sprite.h */ cur.size.y() * camera.zoom);
-		// SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-		// SDL_RenderDrawRect(sdl_renderer, &dst);
+		if (std::shared_ptr<Body> body = cur.getComponent<Body>()) {
+			Game::logger << "has a body\n";
+			dst.x = (int) std::round((cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+			dst.y = (int) std::round((cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+			dst.w = (int) std::round(/*cur.sprite.w */ cur.pos.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+			dst.h = (int) std::round(/* cur.sprite.h */ cur.pos.y() * camera.zoom);
+			SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+			SDL_RenderFillRect(sdl_renderer, &dst);
+		}
+
+
 
 		// dst.x = (cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom;
 		// dst.y = (cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom;

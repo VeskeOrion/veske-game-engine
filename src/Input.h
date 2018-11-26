@@ -14,7 +14,7 @@
 #include <map>
 #include <array>
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "Math.h"
 

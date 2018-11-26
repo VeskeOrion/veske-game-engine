@@ -16,7 +16,7 @@
 
 #include <memory>
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "Window.h"
 #include "Renderer.h"

@@ -14,7 +14,7 @@
 
 #include <memory>
 
-#include <SDL/SDL.h>
+#include <SDL.h>
 
 #include "Game.h"
 #include "Entity.h"

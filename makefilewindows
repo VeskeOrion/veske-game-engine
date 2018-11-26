@@ -8,7 +8,7 @@ GAME_OBJ := $(patsubst src/%.cpp,%.obj,$(GAME_SRC))
 CC := cl
 LDFLAGS := -link -subsystem:console -machine:x86 -libpath:C:/devlibs/SDL2/lib/x86 \
            -libpath:C:/devlibs/SDL2_image/lib/x86 -debug:full -out:$(GAME) -nologo
-CFLAGS := -c -EHsc -nologo
+CFLAGS := -c -EHsc -nologo -I C:/devlibs/SDL2/include -I C:/devlibs/SDL2_image/include
 LLIBS := SDL2main.lib SDL2.lib SDL2_image.lib
 
 # Compiling and linking
