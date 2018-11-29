@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <SDL_image.h>
 //#include <SDL_ttf.h>
 
@@ -7,9 +9,9 @@
 #include "Entity.h"
 #include "Component.h"
 #include "Body.h"
+#include "Collider.h"
 #include "Terrain.h"
 
-#include <cmath>
 
 
 
@@ -42,7 +44,7 @@ void Camera::update() {
 	// this could be bad
 	// I need to add in that extrapolation feature in renderer
 	// Camera would have to take advantage of that too or it would fall behind :C
-	if (auto targetLock = target.lock()) {
+	if (std::shared_ptr<Entity> targetLock = target.lock()) {
 		Vector windowSize((float)Game::window->windowWidth  / zoom, 
 						  (float)Game::window->windowHeight / zoom);
 
@@ -176,17 +178,18 @@ void Renderer::render() {
 	SDL_Rect src;
 	SDL_Rect dst;
 	// for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
-	for (auto i : Game::world->entities) {
-		Entity & cur = *i;
+	for (std::shared_ptr<Entity> cur : Game::world->entities) {
+		//Entity & cur = *i;
+		std::shared_ptr<Collider> curBody = cur->getComponent<Collider>();
 
-		if (std::shared_ptr<Body> body = cur.getComponent<Body>()) {
-			Game::logger << "has a body\n";
-			dst.x = (int) std::round((cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
-			dst.y = (int) std::round((cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
-			dst.w = (int) std::round(/*cur.sprite.w */ cur.pos.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
-			dst.h = (int) std::round(/* cur.sprite.h */ cur.pos.y() * camera.zoom);
+		if (curBody) {
+			// Game::logger << "has a collider\n";
+			dst.x = (int) std::round((cur->pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+			dst.y = (int) std::round((cur->pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+			dst.w = (int) std::round(curBody->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+			dst.h = (int) std::round(curBody->aabb.y() * camera.zoom);
 			SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-			SDL_RenderFillRect(sdl_renderer, &dst);
+			SDL_RenderDrawRect(sdl_renderer, &dst);
 		}
 
 

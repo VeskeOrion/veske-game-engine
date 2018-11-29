@@ -13,14 +13,15 @@
 #define ENTITY_H
 
 
-#include <list>
+#include <vector>
 #include <memory>
 
 #include "Math.h"
-#include "Component.h"
 #include "Sprite.h"
 
 //#include "Collision.h"
+
+class Component;
 
 class Entity {
 public:
@@ -77,6 +78,7 @@ public:
 
 	template <typename T>
 	void addComponent(std::shared_ptr<T> component) {
+		component->entity = thisEntity;
 		components.push_back(component);
 	}
 };

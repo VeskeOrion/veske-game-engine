@@ -1,4 +1,6 @@
 #include "Body.h"
+#include "Game.h" // TODO remove this
+#include "Entity.h"
 
 Body::Body() {
     executionOrder = 0;
@@ -33,6 +35,11 @@ void Body::pretick() {
 	
 	// // Apply drag
 	// vel.set(moveTo(vel.xf(), 0.0f, drag.xf()), moveTo(vel.yf(), 0.0f, drag.yf()));
+	if (auto entityLock = entity.lock()) {
+		Game::logger << "we jigglin\n";
+		entityLock->pos.addX(randomNum(-1, 1));
+		entityLock->pos.addY(randomNum(-1, 1));
+	}
 }
 
 void Body::tick() {

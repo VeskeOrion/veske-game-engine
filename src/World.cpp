@@ -4,6 +4,7 @@
 #include "Entity.h" // TODO remove this, this is for debug testing by spawning players
 #include "Terrain.h" // TODO remove this, this is for debug testing by spawning players
 #include "Collision.h"
+#include "Collider.h"
 #include "Component.h" // TODO remove this, this is for debug testing by spawning players
 #include "Body.h" // TODO remove this, this is for debug testing by spawning players
 
@@ -67,16 +68,27 @@ void World::init() {
 	// PUT DEBUG WORLD INITIALIZATION CODE HERE
 
 
+	for (int i = 0; i < 10; ++i) {
+		std::shared_ptr<Entity> ent = std::make_shared<Entity>();
+		Game::world->addEntity(ent);
+
+
+		// TODO MUST FIX, entity->thisEntity gets set by world, so components dont have access to it when being aded if they are added before entity is put inot world :C
+		std::shared_ptr<Collider> col = std::make_shared<Collider>();
+		std::shared_ptr<Body> bod = std::make_shared<Body>();
+		ent->addComponent(col);
+		ent->addComponent(bod);
+
+		ent->pos.set(randomNum(0, 50), randomNum(0, 50));
+		col->aabb.set(randomNum(0, 50), randomNum(0, 50));
+
+	}
+
 	// TODO remove this hardcoded adding player, should be done from a Level object
 	Game::logger << "Starting to init world\n";
-	std::shared_ptr<Entity> ent = std::make_shared<Entity>();
-	std::shared_ptr<Body> com = std::make_shared<Body>();
-	ent->addComponent(com);
 
-	Game::logger << ent->components.size();
 	// k->size.set(32, 32);
 
-	Game::world->addEntity(ent);
 
 	// std::shared_ptr<Player> p(new Player());
 	// Game::world->addEntity(p);

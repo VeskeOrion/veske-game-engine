@@ -1,6 +1,7 @@
 #include "Entity.h"
 #include "Game.h"
 #include "Terrain.h"
+#include "Component.h"
 
 
 unsigned int Entity::entityIDCounter = 0;
@@ -34,11 +35,20 @@ void Entity::init() {
 
 	// TODO remove this
 	Game::logger << "Creating an entity.\n";
+
+	// TODO decide how to init components
+	// for (std::shared_ptr<Component> com : components) {
+	// 	com->init();
+	// }
 }
 
 
 void Entity::pretick() {
 
+
+	for (std::shared_ptr<Component> com : components) {
+		com->pretick();
+	}
 }
 
 
@@ -46,16 +56,28 @@ void Entity::tick() {
 	// Update animation frame // TODO should this be at the end of tick?
 	//sprite.currentAnim.update();
 	//pos = Game::input->getMousePos() / (int)Game::renderer->scaleFactor;
+
+	for (std::shared_ptr<Component> com : components) {
+		com->tick();
+	}
 }
 
 
 void Entity::posttick() {
-	// TODO maybe put this back some day collisionList.clear();
+
+	for (std::shared_ptr<Component> com : components) {
+		com->posttick();
+	}
 }
 
 
 void Entity::destroy() {
 	Game::world->removeEntity(thisEntity.lock());
+
+	// TODO decide how to detroy components
+	// for (std::shared_ptr<Component> com : components) {
+	// 	com->init();
+	// }
 }
 
 
