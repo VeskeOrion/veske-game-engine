@@ -37,8 +37,8 @@ void Camera::init() {
 
 
 void Camera::update() {
-	if (zoom < 0.1f)
-		zoom = 0.1f;
+	// if (zoom < 0.1f) // TODO uneeded?
+	// 	zoom = 0.1f;
 	// Center camera on target
 	// TODO this update call happens every time Render is called
 	// this could be bad

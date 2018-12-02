@@ -13,6 +13,9 @@ public:
 	Vector acc; // Acceleration, affects vel, can be set
 	Vector drag; // Decceleration, affects vel, always on, can be set
 
+    Vector gravity;
+    bool useGravity;
+
     void init();
     void destroy();
     void pretick();

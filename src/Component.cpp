@@ -4,11 +4,11 @@
 Component::Component() {
     executionOrder = 0;
     active = true;
-    Game::logger << "Creating a component.\n";
+    // Game::logger << "Creating a component.\n";
 }
 
 Component::~Component() {
-    Game::logger << "Destroying a component.\n";
+    // Game::logger << "Destroying a component.\n";
 }
 
 void Component::init() {

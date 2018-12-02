@@ -28,7 +28,7 @@ public:
 	~Camera();
 
 	float zoom;
-	const float defaultZoom = 10.0f;
+	const float defaultZoom = 4.0f;
 
 	Vector pos;
 

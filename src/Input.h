@@ -263,14 +263,14 @@ public:
 
 
 	// Behold, our master "virtual controller", the authoritative state of all mapped inputs
-	struct {
-		bool usingKeyboard; // if the last input was keyboard (can change UI based on this)
+	struct VirtualController {
+		bool usingKeyboard = true; // if the last input was keyboard (can change UI based on this)
 
 		Vector mousePos;
 		Vector movementAxes; // horizontal and vertical movement axes
 
-		InputPacket actions[NUM_ACTIONS]; // all actions
-	} virtualController;
+		InputPacket actions[NUM_ACTIONS] = {}; // all actions
+	};
 
 
 	InputPacket mouseButtonPresses[NUM_MOUSEBUTTONS];
@@ -282,8 +282,9 @@ public:
 	//std::list<RawKeyboardKey> tappedKeys;
 	//std::list<RawMouseButton> tappedMouseButtons;
 
-	SDL_GameController * controller = nullptr; // optional SDL game controller handle
+	SDL_GameController * gameController = nullptr; // optional SDL game controller handle TODO make array
 	float deadzone = 0.15f;
+	VirtualController virtualController; // TODO make array
 
 	Input();
 	~Input();

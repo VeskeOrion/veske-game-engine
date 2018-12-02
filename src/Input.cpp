@@ -9,8 +9,8 @@ Input::Input() {
 
 
 Input::~Input() {
-	if (controller != nullptr)
-		SDL_GameControllerClose(controller);
+	if (gameController != nullptr)
+		SDL_GameControllerClose(gameController);
 }
 
 
@@ -22,11 +22,10 @@ bool Input::init() {
 	// TODO this should be done whenever needed if controllers are replugged etc
 	for (int i = 0; i < SDL_NumJoysticks(); ++i) {
 		if (SDL_IsGameController(i)) {
-			controller = SDL_GameControllerOpen(i);
+			gameController = SDL_GameControllerOpen(i);
 			SDL_GameControllerEventState(SDL_ENABLE);
 		}
 	}
-
 
 	auto clearPackets = [](InputPacket packets[], int len){
 		for (int i = 0; i < len; ++i) {
@@ -40,6 +39,7 @@ bool Input::init() {
 	clearPackets(keyPresses, NUM_KEYBOARDKEYS);
 	clearPackets(controllerButtonPresses, NUM_CONTROLLERBUTTONS);
 	clearPackets(controllerAxisMovement, NUM_CONTROLLERAXES);
+	clearPackets(virtualController.actions, NUM_ACTIONS);
 
 	return true;
 }

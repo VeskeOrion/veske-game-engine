@@ -16,7 +16,7 @@ Entity::~Entity() {
 	// TODO set children positions and remove parent's child
 	
 	// TODO remove this
-	Game::logger << "Destroying an entity.\n";
+	// Game::logger << "Destroying an entity.\n";
 }
 
 
@@ -34,7 +34,7 @@ void Entity::init() {
 	// alpha = 1.0;
 
 	// TODO remove this
-	Game::logger << "Creating an entity.\n";
+	// Game::logger << "Creating an entity.\n";
 
 	// TODO decide how to init components
 	// for (std::shared_ptr<Component> com : components) {

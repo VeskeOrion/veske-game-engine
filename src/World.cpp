@@ -68,7 +68,7 @@ void World::init() {
 	// PUT DEBUG WORLD INITIALIZATION CODE HERE
 
 
-	for (int i = 0; i < 10; ++i) {
+	for (int i = 0; i < 3000; ++i) {
 		std::shared_ptr<Entity> ent = std::make_shared<Entity>();
 		Game::world->addEntity(ent);
 
@@ -79,8 +79,8 @@ void World::init() {
 		ent->addComponent(col);
 		ent->addComponent(bod);
 
-		ent->pos.set(randomNum(0, 50), randomNum(0, 50));
-		col->aabb.set(randomNum(0, 50), randomNum(0, 50));
+		ent->pos.set(randomNum(50, 100), randomNum(50, 100));
+		col->aabb.set(randomNum(1, 50), randomNum(1, 50));
 
 	}
 
@@ -158,12 +158,12 @@ void World::run() {
 			tick();
 
 			incrementTickCounter();
-			//Game::logger << "Ticked\n";
+			// Game::logger << "Ticked\n";
 		}
 		render();
-		//Game::logger << "Rendered\n";
+		// Game::logger << "Rendered\n";
 	}
-	//Game::logger << "Done\n";
+	Game::logger << "Done\n";
 }
 
 
@@ -205,11 +205,31 @@ void World::tick() {
 	////**************************************************************************////
 	// PUT DEBUG WORLD LOOP CODE HERE
 
-	if (Game::input->getAction(Input::Action::ACTION_CROUCH))
-		Game::renderer->camera.zoom += 0.2f;
+	if (Game::input->getAction(Input::Action::ACTION_CROUCH)) {
+		Game::renderer->camera.zoom *= 1.05f;
+	}
 
-	if (Game::input->getAction(Input::Action::ACTION_RUN))
-		Game::renderer->camera.zoom -= 0.2f;
+	if (Game::input->getAction(Input::Action::ACTION_RUN)) {
+		Game::renderer->camera.zoom *= 0.95f;
+	}
+
+	if (Game::input->getAction(Input::Action::ACTION_LEFT)) {
+		Game::renderer->camera.pos.addX(-5.0f * (1.0f / Game::renderer->camera.zoom));
+	}
+
+	if (Game::input->getAction(Input::Action::ACTION_RIGHT)) {
+		Game::renderer->camera.pos.addX(+5.0f * (1.0f / Game::renderer->camera.zoom));
+	}
+
+	if (Game::input->getAction(Input::Action::ACTION_UP)) {
+		Game::renderer->camera.pos.addY(-5.0f * (1.0f / Game::renderer->camera.zoom));
+	}
+
+	if (Game::input->getAction(Input::Action::ACTION_DOWN)) {
+		Game::renderer->camera.pos.addY(+5.0f * (1.0f / Game::renderer->camera.zoom));
+	}
+
+
 
 	// if (findEntity("Player")->collisionList.size() != 0) {
 	// 	Game::logger << findEntity("Player")->collisionList.size() << "cols: ";

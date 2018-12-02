@@ -42,24 +42,12 @@ public:
 
 	bool active;
 
-
-	// bool useGravity;
-
-	// //Sprite sprite;
-	// int zIndex;
-	// bool visible;
-	// float alpha;
-	// TODO float scrollFactor;
-
 	// TODO give Entity an Start? function (like Unity's Start) called when world inits after lvel load, GENIUS!
 
 	// TODO worry about parenting and children
 	//std::weak_ptr<Entity> parent;
 	//std::list<std::weak_ptr<Entity>> children;
-
-	// integrate
-	// handle collisions
-	// update
+	// Vector worldPos(); // TODO returns world pos (in relation to parents, etc)
 
 
 	virtual void init();
