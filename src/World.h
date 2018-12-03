@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "Entity.h"
+#include "Collider.h"
 
 
 class World {
@@ -61,6 +62,10 @@ public:
 	void processInput();
 
 	void populateCollisionLists();
+	void pairwiseDetectCollisions();
+	void quadTreeDetectCollisions();
+	void partitionWorldAndCheckCollisions(const std::vector<Collider *> & collidersInPartition, int minX, int maxX, int minY, int maxY, unsigned int partitionSize = 50);
+	
 
 	void initializeGameTime();
 	bool readyToTick();

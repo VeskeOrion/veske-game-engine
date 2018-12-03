@@ -13,6 +13,7 @@ public:
     virtual ~Component();
 
     std::weak_ptr<Entity> entity;
+    std::weak_ptr<Component> thisComponent;
 
     int executionOrder;
     bool active;

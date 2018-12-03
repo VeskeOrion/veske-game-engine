@@ -57,16 +57,32 @@ public:
 	virtual void destroy();
 
 	template <typename T>
-	std::shared_ptr<T> getComponent() {
+	T * getComponent() {
 		for (unsigned int i = 0; i < components.size(); ++i)
-			if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(components[i]))
-				return t;
+			if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(components.at(i)))
+				return t.get();
 		return nullptr;
+	}
+
+	template <typename T>
+	std::vector<T *> getComponents() {
+		std::vector<T *> matchedComponents;
+		for (unsigned int i = 0; i < components.size(); ++i)
+			if (std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(components.at(i)))
+				matchedComponents.push_back(t.get());
+		return matchedComponents;
+	}
+
+	template <typename T, typename... Args>
+	void createComponent(Args&&... args) {
+		std::shared_ptr<Component> component = std::make_shared<T>(args);
+		addComponent(component);
 	}
 
 	template <typename T>
 	void addComponent(std::shared_ptr<T> component) {
 		component->entity = thisEntity;
+		component->thisComponent = component;
 		components.push_back(component);
 	}
 };

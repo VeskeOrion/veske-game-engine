@@ -19,8 +19,6 @@ void Body::destroy() {
 }
 
 void Body::pretick() {
-
-	// Move body so drag doesn't affect velocities that were applied just last frame
 	if (useGravity)
 		acc = gravity;
 
@@ -33,13 +31,8 @@ void Body::pretick() {
 			entityLock->pos = Game::input->getMousePos() / Game::renderer->camera.zoom;
 	}
 
-	// why? TODO?
-	// if (withinEpsilon(pos.xf(), lastPos.xf()))
-	// 	vel.setX(0.0f);
-	// if (withinEpsilon(pos.yf(), lastPos.yf()))
-	// 	vel.setY(0.0f);
 	
-	// TODO this is mos certainly in the wrong place
+	// TODO this is most certainly in the wrong place
 	// Apply drag
 	// vel.set(moveTo(vel.xf(), 0.0f, drag.xf()), moveTo(vel.yf(), 0.0f, drag.yf()));
 }
@@ -55,3 +48,12 @@ void Body::tick() {
 void Body::posttick() {
 
 }
+
+// TODO needs more info, like size
+// Vector Body::center() {
+// 	Vector center;  
+// 	if (auto entityLock = entity.lock()) {
+// 		center = center + entityLock->pos;
+// 	}
+// 	return center + aabb / 2.0f;
+// }

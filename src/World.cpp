@@ -1,6 +1,11 @@
 #include "World.h"
 #include "Game.h"
 
+#include <algorithm>
+#include <vector>
+#include <list>
+#include <array>
+
 #include "Entity.h" // TODO remove this, this is for debug testing by spawning players
 #include "Terrain.h" // TODO remove this, this is for debug testing by spawning players
 #include "Collision.h"
@@ -68,7 +73,7 @@ void World::init() {
 	// PUT DEBUG WORLD INITIALIZATION CODE HERE
 
 
-	for (int i = 0; i < 3000; ++i) {
+	for (int i = 0; i < 300; ++i) {
 		std::shared_ptr<Entity> ent = std::make_shared<Entity>();
 		Game::world->addEntity(ent);
 
@@ -270,18 +275,71 @@ void World::processInput() {
 
 
 void World::populateCollisionLists() {
+	//pairwiseDetectCollisions();
+	quadTreeDetectCollisions();
+}
 
 
-	// TODO this should be a quad tree fast collision detection algorithm
-	// TODO could create collision objects that each entity stores isntead of storing the entity
-	// for (auto & i : entities) {
-	// 	i->collisionList.clear();
-	// 	for (auto & j : entities) {
-	// 		if (i !=j && i->checkCollision(j)) {
-	// 			i->collisionList.push_back(j); // TODO make collision objects instead
-	// 		}
-	// 	}
-	// }
+void World::pairwiseDetectCollisions() {
+	//Slow pair-by-pair collision detection
+	for (std::shared_ptr<Entity> i : entities) {
+		for (std::shared_ptr<Entity> j : entities) {
+			if (i != j) {
+				Collider * coli = i->getComponent<Collider>();
+				Collider * colj = j->getComponent<Collider>();
+				if (coli && colj && coli->broadIsColliding(colj)) {
+					//std::cout << "Colliding" << std::endl;
+					int x;
+				}
+			}
+		}
+	}
+}
+
+
+void World::quadTreeDetectCollisions() {
+	// quadrants are numbered in the same way, based on pos and neg, like a cartesian graph
+
+	// find initial world size (linear)
+	int minX, maxX, minY, maxY;
+	minX = maxX = entities.front()->pos.x();
+	minY = maxY = entities.front()->pos.y();
+	for (std::shared_ptr<Entity> e : entities) {
+		minX = e->pos.x() < minX ? e->pos.x() : minX;
+		maxX = e->pos.x() > maxX ? e->pos.x() : maxX;
+		minY = e->pos.y() < minY ? e->pos.y() : minY;
+		maxY = e->pos.y() > maxY ? e->pos.y() : maxY;
+	}
+
+	// create list of all colliders
+	std::vector<Collider *> allColliders;
+	std::for_each(entities.begin(), entities.end(),
+		[&allColliders] (std::shared_ptr<Entity> entity) {
+			std::vector<Collider *> entityColliders = entity->getComponents<Collider>();
+			allColliders.insert(allColliders.end(), entityColliders.begin(), entityColliders.end());
+		}
+	);
+	
+	partitionWorldAndCheckCollisions(allColliders, minX, maxX, minY, maxY);
+
+}
+
+void World::partitionWorldAndCheckCollisions(const std::vector<Collider *> & collidersInPartition, int minX, int maxX, int minY, int maxY, unsigned int partitionSize) {
+	if (maxX - minX <= partitionSize && maxY - minY <= partitionSize) {
+		// base case
+		// call isColliding on all colliders
+		// but not if they have the same root parent
+	}
+	else {
+		// recursive case, make vectors of all colliders in the same partition
+		int midX = (maxX - minX) / 2 + minX;
+		int midY = (maxY - minY) / 2 + minY;
+
+		std::array<std::vector<Entity>, 4> quadrants;
+		for (Collider * c : collidersInPartition) {
+			// need entity world pos + collider offset to do this math :(
+		}
+	}
 }
 
 

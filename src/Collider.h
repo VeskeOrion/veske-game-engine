@@ -1,6 +1,9 @@
 #ifndef COLLIDER_H
 #define COLLIDER_H
 
+#include <memory>
+#include <vector>
+
 #include "Math.h"
 #include "Component.h"
 
@@ -10,12 +13,16 @@ public:
     virtual ~Collider();
 
     Vector aabb;
+    //Vector offset;
 
     virtual void init();
     virtual void destroy();
     virtual void pretick();
     virtual void tick();
     virtual void posttick();
+
+    bool broadIsColliding(Collider * col);
+    //virtual std::vector<Vector> getAxes(Collider * col = nullptr);
 };
 
 #endif // COLLIDER_H

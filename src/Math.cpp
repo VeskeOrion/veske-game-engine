@@ -96,6 +96,12 @@ Vector Vector::normalized() {
 	return (*this) / length();
 }
 
+Vector Vector::reciprocal() {
+	Vector v;
+	v.set(-this->mY, this->mX);
+	return v;
+}
+
 Vector Vector::operator+(Vector v) {
 	Vector res;
 	res.set(this->mX + v.mX, this->mY + v.mY);

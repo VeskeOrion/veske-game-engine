@@ -21,6 +21,8 @@ public:
     void pretick();
     void tick();
     void posttick();
+
+    // Vector center();
 };
 
 #endif // BODY_H

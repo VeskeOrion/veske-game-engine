@@ -180,14 +180,14 @@ void Renderer::render() {
 	// for (auto i = Game::world->entities.begin(); i != Game::world->entities.end(); ++i) {
 	for (std::shared_ptr<Entity> cur : Game::world->entities) {
 		//Entity & cur = *i;
-		std::shared_ptr<Collider> curBody = cur->getComponent<Collider>();
+		Collider * curCol = cur->getComponent<Collider>();
 
-		if (curBody) {
+		if (curCol) {
 			// Game::logger << "has a collider\n";
 			dst.x = (int) std::round((cur->pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
 			dst.y = (int) std::round((cur->pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
-			dst.w = (int) std::round(curBody->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
-			dst.h = (int) std::round(curBody->aabb.y() * camera.zoom);
+			dst.w = (int) std::round(curCol->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+			dst.h = (int) std::round(curCol->aabb.y() * camera.zoom);
 			SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 			SDL_RenderDrawRect(sdl_renderer, &dst);
 		}

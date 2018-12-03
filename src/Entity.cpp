@@ -85,10 +85,5 @@ void Entity::destroy() {
 
 
 // bool Entity::checkCollision(std::shared_ptr<Entity> e) {
-// 	bool xcontains = (pos.x()    <= e->pos.x() && e->pos.x() < pos.x()    + size.x()   ) ||
-// 					 (e->pos.x() <= pos.x()    && pos.x()    < e->pos.x() + e->size.x());
-// 	bool ycontains = (pos.y()    <= e->pos.y() && e->pos.y() < pos.y()    + size.y()   ) ||
-// 					 (e->pos.y() <= pos.y()    && pos.y()    < e->pos.y() + e->size.y());
 
-// 	return xcontains && ycontains;
 // }

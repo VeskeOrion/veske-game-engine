@@ -38,6 +38,7 @@ public:
 
 	float length();
 	Vector normalized();
+	Vector reciprocal(); // left handed
 
 	Vector operator+(Vector v);
 	Vector operator-(Vector v);
