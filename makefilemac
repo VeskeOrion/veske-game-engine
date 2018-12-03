@@ -7,7 +7,7 @@ GAME_OBJ := $(patsubst src/%.cpp,%.o,$(GAME_SRC))
 # Compiler stuff
 CC := g++
 LDFLAGS := 
-CFLAGS := -c -std=c++11
+CFLAGS := -I /usr/local/Cellar/sdl2/2.0.8/include/SDL2/ -I /usr/local/Cellar/sdl2_image/2.0.4/include/SDL2/ -c -std=c++11
 LLIBS := ~/devlibs/SDL2/lib/libSDL2.dylib ~/devlibs/SDL2_image/lib/libSDL2_image.dylib
 
 # Compiling and linking

@@ -73,11 +73,11 @@ public:
 		return matchedComponents;
 	}
 
-	template <typename T, typename... Args>
-	void createComponent(Args&&... args) {
-		std::shared_ptr<Component> component = std::make_shared<T>(args);
-		addComponent(component);
-	}
+	// template <typename T, typename... Args>
+	// void createComponent(Args&&... args) {
+	// 	std::shared_ptr<Component> component = std::make_shared<T>(args);
+	// 	addComponent(component);
+	// }
 
 	template <typename T>
 	void addComponent(std::shared_ptr<T> component) {
