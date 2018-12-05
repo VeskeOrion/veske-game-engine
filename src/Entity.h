@@ -38,7 +38,7 @@ public:
 	std::vector<std::shared_ptr<Component>> components;
 
 	std::string name;
-	Vector pos;
+	Vector localPos;
 
 	bool active;
 
@@ -55,6 +55,8 @@ public:
 	virtual void tick();
 	virtual void posttick();
 	virtual void destroy();
+
+	Vector pos();
 
 	template <typename T>
 	T * getComponent() {

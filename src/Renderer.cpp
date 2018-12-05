@@ -184,11 +184,14 @@ void Renderer::render() {
 
 		if (curCol) {
 			// Game::logger << "has a collider\n";
-			dst.x = (int) std::round((cur->pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
-			dst.y = (int) std::round((cur->pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+			dst.x = (int) std::round((cur->pos().x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+			dst.y = (int) std::round((cur->pos().y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
 			dst.w = (int) std::round(curCol->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
 			dst.h = (int) std::round(curCol->aabb.y() * camera.zoom);
-			SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+			if (curCol->isColliding)
+				SDL_SetRenderDrawColor(sdl_renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+			else
+				SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 			SDL_RenderDrawRect(sdl_renderer, &dst);
 		}
 

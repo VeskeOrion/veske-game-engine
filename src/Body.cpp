@@ -25,10 +25,10 @@ void Body::pretick() {
 	vel = vel + acc;
 
 	if (auto entityLock = entity.lock()) {
-		entityLock->pos = entityLock->pos + vel;
+		entityLock->localPos = entityLock->localPos + vel;
 
 		if (Game::input->getAction(Input::Action::ACTION_JUMP))
-			entityLock->pos = Game::input->getMousePos() / Game::renderer->camera.zoom;
+			entityLock->localPos = Game::input->getMousePos() / Game::renderer->camera.zoom;
 	}
 
 	

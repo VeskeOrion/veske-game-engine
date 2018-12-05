@@ -35,14 +35,22 @@ bool Collider::broadIsColliding(Collider * col) {
     auto eLock = entity.lock();
     auto cLock = col->entity.lock();
     if (eLock && cLock) {
-        bool xcontains = (eLock->pos.x() <= cLock->pos.x() && cLock->pos.x() < eLock->pos.x() + this->aabb.x()) ||
-					     (cLock->pos.x() <= eLock->pos.x() && eLock->pos.x() < cLock->pos.x() + col->aabb.x());
-        bool ycontains = (eLock->pos.y() <= cLock->pos.y() && cLock->pos.y() < eLock->pos.y() + this->aabb.y()) ||
-					     (cLock->pos.y() <= eLock->pos.y() && eLock->pos.y() < cLock->pos.y() + col->aabb.y());
+        bool xcontains = (eLock->pos().x() <= cLock->pos().x() && cLock->pos().x() < eLock->pos().x() + this->aabb.x()) ||
+					     (cLock->pos().x() <= eLock->pos().x() && eLock->pos().x() < cLock->pos().x() + col->aabb.x());
+        bool ycontains = (eLock->pos().y() <= cLock->pos().y() && cLock->pos().y() < eLock->pos().y() + this->aabb.y()) ||
+					     (cLock->pos().y() <= eLock->pos().y() && eLock->pos().y() < cLock->pos().y() + col->aabb.y());
 
 	    return xcontains && ycontains;
     }
     return false;
+}
+
+Vector Collider::pos() {
+    Vector p;
+    if (auto eLock = entity.lock()) {
+        p = eLock->pos(); // + offset;
+    }
+    return p;
 }
 
 // std::list<Vector> Collider::getAxes(Collider * col) {

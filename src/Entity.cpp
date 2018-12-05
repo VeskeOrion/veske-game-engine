@@ -81,6 +81,10 @@ void Entity::destroy() {
 }
 
 
+Vector Entity::pos() {
+	return localPos;
+}
+
 
 
 

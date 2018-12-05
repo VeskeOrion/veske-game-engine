@@ -13,13 +13,17 @@ public:
     virtual ~Collider();
 
     Vector aabb;
-    //Vector offset;
+    //Vector localOffset;
+
+    bool isColliding = false; // TODO remove
 
     virtual void init();
     virtual void destroy();
     virtual void pretick();
     virtual void tick();
     virtual void posttick();
+
+    Vector pos();
 
     bool broadIsColliding(Collider * col);
     //virtual std::vector<Vector> getAxes(Collider * col = nullptr);

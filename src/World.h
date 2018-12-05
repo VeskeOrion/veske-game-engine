@@ -39,6 +39,10 @@ public:
 	std::shared_ptr<Entity> findEntity(std::shared_ptr<Entity> e);
 	std::shared_ptr<Entity> findEntity(const std::string & name);
 
+
+	int collisionChecks = 0; // TODO REMOVE
+	int partitions = 0; // TODO remove
+	int partitionSizeAvg = 0;
 	// Level management
 	// loadLevel
 	// setLevel
@@ -64,7 +68,7 @@ public:
 	void populateCollisionLists();
 	void pairwiseDetectCollisions();
 	void quadTreeDetectCollisions();
-	void partitionWorldAndCheckCollisions(const std::vector<Collider *> & collidersInPartition, int minX, int maxX, int minY, int maxY, unsigned int partitionSize = 50);
+	void partitionWorldAndCheckCollisions(const std::vector<Collider *> & collidersInPartition, int minX, int maxX, int minY, int maxY, unsigned int partitionSize = 25);
 	
 
 	void initializeGameTime();

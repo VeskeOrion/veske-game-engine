@@ -73,7 +73,7 @@ void World::init() {
 	// PUT DEBUG WORLD INITIALIZATION CODE HERE
 
 
-	for (int i = 0; i < 300; ++i) {
+	for (int i = 0; i < 500; ++i) {
 		std::shared_ptr<Entity> ent = std::make_shared<Entity>();
 		Game::world->addEntity(ent);
 
@@ -84,7 +84,7 @@ void World::init() {
 		ent->addComponent(col);
 		ent->addComponent(bod);
 
-		ent->pos.set(randomNum(50, 100), randomNum(50, 100));
+		ent->localPos.set(randomNum(50, 1000), randomNum(50, 1000));
 		col->aabb.set(randomNum(1, 50), randomNum(1, 50));
 
 	}
@@ -275,21 +275,49 @@ void World::processInput() {
 
 
 void World::populateCollisionLists() {
-	//pairwiseDetectCollisions();
+	collisionChecks = 0; // TODO remove
+	partitions = 0; // TODO remove
+
+	// pairwiseDetectCollisions();
 	quadTreeDetectCollisions();
+
+	std::cout << "Checked " << collisionChecks << " in " << partitions << " partitions." << std::endl;
 }
 
 
 void World::pairwiseDetectCollisions() {
 	//Slow pair-by-pair collision detection
-	for (std::shared_ptr<Entity> i : entities) {
-		for (std::shared_ptr<Entity> j : entities) {
-			if (i != j) {
-				Collider * coli = i->getComponent<Collider>();
-				Collider * colj = j->getComponent<Collider>();
-				if (coli && colj && coli->broadIsColliding(colj)) {
-					//std::cout << "Colliding" << std::endl;
-					int x;
+	// for (std::shared_ptr<Entity> i : entities) {
+	// 	for (std::shared_ptr<Entity> j : entities) {
+	// 		if (i != j) {
+	// 			++collisionChecks;
+	// 			Collider * coli = i->getComponent<Collider>();
+	// 			Collider * colj = j->getComponent<Collider>();
+	// 			if (coli && colj && coli->broadIsColliding(colj)) {
+	// 				coli->isColliding = true;
+	// 				colj->isColliding = true; // TODO revamp
+	// 			}
+	// 		}
+	// 	}
+	// }
+	std::vector<Collider *> allColliders;
+	std::for_each(entities.begin(), entities.end(),
+		[&allColliders] (std::shared_ptr<Entity> entity) {
+			std::vector<Collider *> entityColliders = entity->getComponents<Collider>();
+			allColliders.insert(allColliders.end(), entityColliders.begin(), entityColliders.end());
+		}
+	);
+	for (Collider * col : allColliders) {
+		col->isColliding = false;
+	}
+	for (Collider * col1 : allColliders) {
+		for (Collider * col2 : allColliders) {
+			if (col1 != col2) {
+				++collisionChecks;
+
+				if (col1->broadIsColliding(col2)) {
+					col1->isColliding = true;
+					col2->isColliding = true;
 				}
 			}
 		}
@@ -302,43 +330,89 @@ void World::quadTreeDetectCollisions() {
 
 	// find initial world size (linear)
 	int minX, maxX, minY, maxY;
-	minX = maxX = entities.front()->pos.x();
-	minY = maxY = entities.front()->pos.y();
+	minX = maxX = entities.front()->pos().x();
+	minY = maxY = entities.front()->pos().y();
+	
 	for (std::shared_ptr<Entity> e : entities) {
-		minX = e->pos.x() < minX ? e->pos.x() : minX;
-		maxX = e->pos.x() > maxX ? e->pos.x() : maxX;
-		minY = e->pos.y() < minY ? e->pos.y() : minY;
-		maxY = e->pos.y() > maxY ? e->pos.y() : maxY;
-	}
-
+		minX = e->pos().x() < minX ? e->pos().x() : minX;
+		maxX = e->pos().x() > maxX ? e->pos().x() : maxX;
+		minY = e->pos().y() < minY ? e->pos().y() : minY;
+		maxY = e->pos().y() > maxY ? e->pos().y() : maxY;
+	} // TODO swap these e->pos() out for a loop over collider->pos ??? necessary?
+	
 	// create list of all colliders
 	std::vector<Collider *> allColliders;
-	std::for_each(entities.begin(), entities.end(),
-		[&allColliders] (std::shared_ptr<Entity> entity) {
-			std::vector<Collider *> entityColliders = entity->getComponents<Collider>();
-			allColliders.insert(allColliders.end(), entityColliders.begin(), entityColliders.end());
-		}
-	);
-	
-	partitionWorldAndCheckCollisions(allColliders, minX, maxX, minY, maxY);
+	for (std::shared_ptr<Entity> entity : entities) {
+		std::vector<Collider *> entityColliders = entity->getComponents<Collider>();
+		allColliders.insert(allColliders.end(), entityColliders.begin(), entityColliders.end());
+	}
+	// std::for_each(entities.begin(), entities.end(),
+	// 	[&allColliders] (std::shared_ptr<Entity> entity) {
+	// 		std::vector<Collider *> entityColliders = entity->getComponents<Collider>();
+	// 		allColliders.insert(allColliders.end(), entityColliders.begin(), entityColliders.end());
+	// 	}
+	// );
 
+	for (Collider * col : allColliders) {
+		col->isColliding = false; // TODO remove
+	}
+	
+
+	partitionWorldAndCheckCollisions(allColliders, minX, maxX, minY, maxY);
 }
 
 void World::partitionWorldAndCheckCollisions(const std::vector<Collider *> & collidersInPartition, int minX, int maxX, int minY, int maxY, unsigned int partitionSize) {
-	if (maxX - minX <= partitionSize && maxY - minY <= partitionSize) {
-		// base case
-		// call isColliding on all colliders
-		// but not if they have the same root parent
+	if (collidersInPartition.size() < 2)
+		return;
+	
+	// lots of large entities significantly affect the performance of this, big entities will
+	// get put in pretty much every quadrants' collider list, and get checked by each list
+	// multiuple times (MORE TIMES THAN JUST PAIRWISE!)
+	// quad tree performs best when there are not lots of active collisions
+	// performs worse than pairwise if jam packed
+	// TODO decide magic number of colliders its OK to loop over
+	if ((maxX - minX <= partitionSize && maxY - minY <= partitionSize) || collidersInPartition.size() == 2) {
+		// TODO check early here if 2 entities
+		++partitions;
+		for (Collider * col1 : collidersInPartition) {
+			for (Collider * col2 : collidersInPartition) {
+				if (col1 != col2) {
+					++collisionChecks;
+					if( col1->broadIsColliding(col2)) {
+						col1->isColliding = true;
+						col2->isColliding = true; // TODO revamp
+					}
+				}
+			}
+		}
 	}
 	else {
 		// recursive case, make vectors of all colliders in the same partition
 		int midX = (maxX - minX) / 2 + minX;
 		int midY = (maxY - minY) / 2 + minY;
 
-		std::array<std::vector<Entity>, 4> quadrants;
+		std::array<std::vector<Collider *>, 4> quadrants;
 		for (Collider * c : collidersInPartition) {
 			// need entity world pos + collider offset to do this math :(
+				Vector curPos = c->pos();
+				if (curPos.x() < midX && curPos.y() < midY) { // top left is in quad 3
+					quadrants.at(2).push_back(c);
+				}
+				if (curPos.x() + c->aabb.x() >= midX && curPos.y() < midY) { // top right is in quad 4
+					quadrants.at(3).push_back(c);
+				}
+				if (curPos.x() < midX && curPos.y() + c->aabb.y() >= midY) { // bot left is in quad 2
+					quadrants.at(1).push_back(c);
+				}
+				if (curPos.x() + c->aabb.x() >= midX && curPos.y() + c->aabb.y() >= midY) { // bot right is in quad 1
+					quadrants.at(0).push_back(c);
+				}
 		}
+
+		partitionWorldAndCheckCollisions(quadrants.at(0), midX, maxX, midY, maxY);
+		partitionWorldAndCheckCollisions(quadrants.at(1), minX, midX, midY, maxY);
+		partitionWorldAndCheckCollisions(quadrants.at(2), minX, midX, minY, midY);
+		partitionWorldAndCheckCollisions(quadrants.at(3), midX, maxX, minY, midY);
 	}
 }
 
