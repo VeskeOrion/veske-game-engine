@@ -85,8 +85,8 @@ void Camera::follow(std::weak_ptr<Entity> targ) {
 
 Vector Camera::worldToCamera(Vector point) {
 	Vector res;
-	res.setX(std::round((point.x() - pos.xf()) * zoom));
-	res.setY(std::round((point.y() - pos.yf()) * zoom));
+	res.setX((point.x() - pos.xf()) * zoom);
+	res.setY((point.y() - pos.yf()) * zoom);
 	return res;
 }
 
@@ -172,6 +172,15 @@ void Renderer::render() {
 	// 	dst.w = size.x();
 	// 	dst.h = size.y();
 
+	for (int i = 0; i < 1000; ++i) {
+		SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawLine(sdl_renderer, i * camera.zoom, 0, i * camera.zoom, 2000);
+	}
+	for (int i = 0; i < 1000; ++i) {
+		SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
+		SDL_RenderDrawLine(sdl_renderer, 0, i * camera.zoom, 2000, i * camera.zoom);
+	}
+
 	// 	SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 	// 	SDL_RenderFillRect(sdl_renderer, &dst);
 	// render entities
@@ -184,25 +193,16 @@ void Renderer::render() {
 
 		if (curCol) {
 			// Game::logger << "has a collider\n";
-			dst.x = (int) std::round((cur->pos().x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
-			dst.y = (int) std::round((cur->pos().y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
-			dst.w = (int) std::round(curCol->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
-			dst.h = (int) std::round(curCol->aabb.y() * camera.zoom);
+			dst.x = (int) ((cur->pos().x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
+			dst.y = (int) ((cur->pos().y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
+			dst.w = (int) (curCol->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
+			dst.h = (int) (curCol->aabb.y() * camera.zoom);
 			if (curCol->isColliding)
 				SDL_SetRenderDrawColor(sdl_renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 			else
 				SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 			SDL_RenderDrawRect(sdl_renderer, &dst);
 		}
-
-
-
-		// dst.x = (cur.pos.x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom;
-		// dst.y = (cur.pos.y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom;
-		// dst.w = /*cur.sprite.w */ cur.size.x() * camera.zoom;
-		// dst.h = /* cur.sprite.h */ cur.size.y() * camera.zoom;
-		// SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
-		// SDL_RenderDrawRect(sdl_renderer, &dst);
 
 		// if (cur.visible && cur.active && cur.sprite.texture) {
 		// 	// The src rectangle is the place in the spritesheet we want to render from

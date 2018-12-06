@@ -40,8 +40,8 @@ void Body::pretick() {
 void Body::tick() {
 	if (entity.lock() && randomNum() > 0.9f) {
 		// Game::logger << "we jigglin\n";
-		vel.addX(randomNum(-1, 1));
-		vel.addY(randomNum(-1, 1));
+		// vel.addX(randomNum(-1, 1));
+		// vel.addY(randomNum(-1, 1));
 	}
 }
 

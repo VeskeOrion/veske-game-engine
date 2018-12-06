@@ -28,12 +28,12 @@ Vector::~Vector() {
 
 
 int Vector::x() {
-	return int(std::round(mX));
+	return int(mX);
 }
 
 
 int Vector::y() {
-	return int(std::round(mY));
+	return int(mY);
 }
 
 

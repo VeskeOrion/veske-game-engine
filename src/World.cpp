@@ -84,8 +84,8 @@ void World::init() {
 		ent->addComponent(col);
 		ent->addComponent(bod);
 
-		ent->localPos.set(randomNum(50, 1000), randomNum(50, 1000));
-		col->aabb.set(randomNum(1, 50), randomNum(1, 50));
+		ent->localPos.set(randomNum(-200, 200), randomNum(-200, 200));
+		col->aabb.set((int)randomNum(1, 50), (int)randomNum(1, 50));
 
 	}
 
@@ -211,11 +211,11 @@ void World::tick() {
 	// PUT DEBUG WORLD LOOP CODE HERE
 
 	if (Game::input->getAction(Input::Action::ACTION_CROUCH)) {
-		Game::renderer->camera.zoom *= 1.05f;
+		Game::renderer->camera.zoom *= 1.001f;
 	}
 
 	if (Game::input->getAction(Input::Action::ACTION_RUN)) {
-		Game::renderer->camera.zoom *= 0.95f;
+		Game::renderer->camera.zoom *= 0.999f;
 	}
 
 	if (Game::input->getAction(Input::Action::ACTION_LEFT)) {
