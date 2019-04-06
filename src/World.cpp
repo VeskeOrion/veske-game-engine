@@ -211,11 +211,11 @@ void World::tick() {
 	// PUT DEBUG WORLD LOOP CODE HERE
 
 	if (Game::input->getAction(Input::Action::ACTION_CROUCH)) {
-		Game::renderer->camera.zoom *= 1.001f;
+		Game::renderer->camera.zoom *= 1.05f;
 	}
 
 	if (Game::input->getAction(Input::Action::ACTION_RUN)) {
-		Game::renderer->camera.zoom *= 0.999f;
+		Game::renderer->camera.zoom *= 0.95f;
 	}
 
 	if (Game::input->getAction(Input::Action::ACTION_LEFT)) {

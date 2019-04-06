@@ -172,14 +172,14 @@ void Renderer::render() {
 	// 	dst.w = size.x();
 	// 	dst.h = size.y();
 
-	for (int i = 0; i < 1000; ++i) {
-		SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(sdl_renderer, i * camera.zoom, 0, i * camera.zoom, 2000);
-	}
-	for (int i = 0; i < 1000; ++i) {
-		SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
-		SDL_RenderDrawLine(sdl_renderer, 0, i * camera.zoom, 2000, i * camera.zoom);
-	}
+	// for (int i = 0; i < 1000; ++i) {
+	// 	SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
+	// 	SDL_RenderDrawLine(sdl_renderer, i * camera.zoom, 0, i * camera.zoom, 2000);
+	// }
+	// for (int i = 0; i < 1000; ++i) {
+	// 	SDL_SetRenderDrawColor(sdl_renderer, 0, 200, 200, SDL_ALPHA_OPAQUE);
+	// 	SDL_RenderDrawLine(sdl_renderer, 0, i * camera.zoom, 2000, i * camera.zoom);
+	// }
 
 	// 	SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
 	// 	SDL_RenderFillRect(sdl_renderer, &dst);
@@ -192,15 +192,18 @@ void Renderer::render() {
 		Collider * curCol = cur->getComponent<Collider>();
 
 		if (curCol) {
-			// Game::logger << "has a collider\n";
+			// Set pos to a point 
 			dst.x = (int) ((cur->pos().x() /* + cur.sprite.offx */ - camera.pos.xf()) * camera.zoom);
 			dst.y = (int) ((cur->pos().y() /* + cur.sprite.offy */ - camera.pos.yf()) * camera.zoom);
-			dst.w = (int) (curCol->aabb.x() * camera.zoom);// TODO the height and width may not line up perfectly with pixel grid roudning the position and the width takes of more than .5 units collectively
-			dst.h = (int) (curCol->aabb.y() * camera.zoom);
+			
+			dst.w = (int) ((cur->pos().x() + curCol->aabb.x()  - camera.pos.xf()) * camera.zoom - dst.x);
+			dst.h = (int) ((cur->pos().y() + curCol->aabb.y()  - camera.pos.yf()) * camera.zoom - dst.y);
+
 			if (curCol->isColliding)
 				SDL_SetRenderDrawColor(sdl_renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
 			else
 				SDL_SetRenderDrawColor(sdl_renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+
 			SDL_RenderDrawRect(sdl_renderer, &dst);
 		}
 
